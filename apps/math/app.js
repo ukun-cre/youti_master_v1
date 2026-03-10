@@ -1,6 +1,6 @@
 const app = {
     settings: { sound: true, level: 1, count: 5 },
-    state: { currentQuestion: 0, score: 0, combo: 0, maxCombo: 0, correctAnswer: 0 },
+    state: { currentQuestion: 0, score: 0, combo: 0, maxCombo: 0, correctAnswer: 0, roundCorrect: 0, roundResults: [] },
     
     // SVG素材（キャラクターとおやつ）
     svg: {
@@ -20,6 +20,7 @@ const app = {
         this.loadSettings();
         document.getElementById('menu-characters').innerHTML = `<div class="character">${this.svg.dog}</div><div class="character">${this.svg.cat}</div>`;
         this.updateSettingsUI();
+        // updateSettingsUI is defined below, so this works fine
     },
 
     loadSettings() {
@@ -79,6 +80,8 @@ const app = {
     startGame() {
         this.state.currentQuestion = 0;
         this.state.combo = 0;
+        this.state.roundCorrect = 0;
+        this.state.roundResults = [];
         document.getElementById('character-reaction').innerHTML = `<div class="character" id="game-char">${this.svg.dog}</div>`;
         this.switchView('view-game');
         this.nextQuestion();
@@ -90,8 +93,7 @@ const app = {
 
     nextQuestion() {
         if (this.state.currentQuestion >= this.settings.count) {
-            this.speak("よくできました！");
-            this.quitGame();
+            this.showResult();
             return;
         }
         this.state.currentQuestion++;
@@ -146,12 +148,17 @@ const app = {
     },
 
     checkAnswer(selected) {
+        // ボタン無効化
+        document.querySelectorAll('.btn-choice').forEach(b => b.disabled = true);
         const charEl = document.getElementById('game-char');
-        if (selected === this.state.correctAnswer) {
+        const isCorrect = selected === this.state.correctAnswer;
+        this.state.roundResults.push(isCorrect);
+        if (isCorrect) {
             this.playSound('correct');
             this.speak("せいかい！すごいね！");
             charEl.classList.add('jump');
             this.fireConfetti();
+            this.state.roundCorrect++;
             this.state.combo++;
             if(this.state.combo > this.state.maxCombo) {
                 this.state.maxCombo = this.state.combo;
@@ -161,14 +168,86 @@ const app = {
             setTimeout(() => {
                 charEl.classList.remove('jump');
                 this.nextQuestion();
-            }, 1500);
+            }, 1200);
         } else {
             this.playSound('wrong');
             this.speak("おしい！もういっかい！");
             this.state.combo = 0;
-            charEl.innerHTML = this.svg.cat; // 不正解時は猫に切り替わる演出
-            setTimeout(() => { charEl.innerHTML = this.svg.dog; }, 1500);
+            charEl.innerHTML = this.svg.cat;
+            setTimeout(() => { charEl.innerHTML = this.svg.dog; this.nextQuestion(); }, 1200);
         }
+    },
+
+    showResult() {
+        const correct = this.state.roundCorrect;
+        const total = this.settings.count;
+        const pct = correct / total;
+        let title = pct === 1 ? '💯 かんぺき！！！' : pct >= 0.8 ? '✨ すごい！！' : pct >= 0.5 ? '👍 よくできました！' : '😊 れんしゅうしよう！';
+        document.getElementById('result-title').textContent = title;
+        document.getElementById('result-correct').textContent = correct;
+        document.getElementById('result-total').textContent = total;
+
+        // 星表示
+        const stars = Math.round(pct * 3);
+        document.getElementById('result-stars').textContent = '⭐'.repeat(stars) + '☆'.repeat(3 - stars);
+
+        // キャラ表示
+        document.getElementById('result-neko-char').innerHTML = pct >= 0.5
+            ? `<div class="character" style="width:120px;height:120px;">${this.svg.dog}</div>`
+            : `<div class="character" style="width:120px;height:120px;">${this.svg.cat}</div>`;
+
+        // 結果バッジ
+        const badges = document.getElementById('result-badges');
+        badges.innerHTML = this.state.roundResults.map(r => `<span class="result-badge ${r ? 'badge-ok' : 'badge-ng'}">${r ? '✓' : '✗'}</span>`).join('');
+
+        this.speak(title + (pct >= 0.8 ? 'おめでとう！' : 'またれんしゅうしてね！'));
+        if (pct >= 0.8) this.fireResultConfetti();
+        this.switchView('view-result');
+    },
+
+    fireResultConfetti() {
+        const canvas = document.getElementById('result-confetti');
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+        let particles = [];
+        for(let i = 0; i < 120; i++) {
+            const angle = Math.random() * Math.PI * 2;
+            const speed = 4 + Math.random() * 8;
+            particles.push({
+                x: canvas.width / 2, y: canvas.height / 2,
+                vx: Math.cos(angle) * speed, vy: Math.sin(angle) * speed - 5,
+                r: Math.random() * 6 + 3, dy: 0.3,
+                color: ['#FF6B6B','#4ECDC4','#FFE66D','#9B59B6','#FF8C42','#5B8DEF'][Math.floor(Math.random()*6)],
+                alpha: 1, shape: Math.random() < 0.5 ? 'rect' : 'circle'
+            });
+        }
+        const animate = () => {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            let active = false;
+            particles.forEach(p => {
+                p.x += p.vx; p.y += p.vy; p.vy += p.dy; p.vx *= 0.99; p.alpha -= 0.015;
+                if (p.alpha > 0) {
+                    active = true;
+                    ctx.save(); ctx.globalAlpha = p.alpha; ctx.fillStyle = p.color;
+                    ctx.translate(p.x, p.y);
+                    if (p.shape === 'rect') ctx.fillRect(-p.r, -p.r/2, p.r*2, p.r);
+                    else { ctx.beginPath(); ctx.arc(0, 0, p.r, 0, Math.PI*2); ctx.fill(); }
+                    ctx.restore();
+                }
+            });
+            if (active) requestAnimationFrame(animate);
+            else ctx.clearRect(0, 0, canvas.width, canvas.height);
+        };
+        animate();
+    },
+
+    updateSettingsUI() {
+        document.getElementById('btn-sound').textContent = this.settings.sound ? 'ON' : 'OFF';
+        const levelSel = document.getElementById('select-level');
+        const countSel = document.getElementById('select-count');
+        if (levelSel) levelSel.value = this.settings.level;
+        if (countSel) countSel.value = this.settings.count;
     },
 
     // 紙吹雪エフェクト (Canvas API)

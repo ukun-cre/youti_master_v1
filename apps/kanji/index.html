@@ -142,17 +142,19 @@
     </div>
 
     <div class="settings-card">
-      <h3 class="settings-section-title">📚 むずかしさのせってい</h3>
-      <div class="difficulty-options">
-        <button class="diff-btn active" id="diff-easy" onclick="App.setDifficulty('easy')">
-          <span class="diff-emoji">⭐</span>
-          <span class="diff-name">かんたん</span>
-          <span class="diff-desc">漢字40こ</span>
+      <h3 class="settings-section-title">📝 もんだいすう</h3>
+      <div class="count-options">
+        <button class="count-btn active" id="count-5" onclick="App.setQuestionCount(5)">
+          <span class="count-num">5</span>
+          <span class="count-unit">もん</span>
         </button>
-        <button class="diff-btn" id="diff-hard" onclick="App.setDifficulty('hard')">
-          <span class="diff-emoji">⭐⭐</span>
-          <span class="diff-name">むずかしい</span>
-          <span class="diff-desc">漢字80こ</span>
+        <button class="count-btn" id="count-7" onclick="App.setQuestionCount(7)">
+          <span class="count-num">7</span>
+          <span class="count-unit">もん</span>
+        </button>
+        <button class="count-btn" id="count-10" onclick="App.setQuestionCount(10)">
+          <span class="count-num">10</span>
+          <span class="count-unit">もん</span>
         </button>
       </div>
     </div>
@@ -250,8 +252,11 @@
 
   <!-- Kanji transformation stage -->
   <div class="kanji-stage" id="kanjiStage">
-    <div class="illustration-wrap" id="illustrationWrap">
-      <!-- SVG illustration injected here -->
+    <div class="illust-block">
+      <div class="illustration-wrap" id="illustrationWrap">
+        <!-- SVG illustration injected here -->
+      </div>
+      <div class="illust-reading" id="illustReading"></div>
     </div>
     <div class="transform-arrow" id="transformArrow">
       <svg viewBox="0 0 60 30" width="60" height="30">
