@@ -1,0 +1,911 @@
+/* ==========================================
+   KANJI DAISUKI - app.js  (80字版)
+   ========================================== */
+'use strict';
+
+/* ── SVG ヘルパー ── */
+function bg(c){ return `<rect width="100" height="100" fill="${c}"/>`; }
+function em(e,x,y,s){ return `<text x="${x}" y="${y}" font-size="${s}" text-anchor="middle">${e}</text>`; }
+function lbl(t,c='#555'){ return `<text x="50" y="94" font-size="11" text-anchor="middle" fill="${c}" font-family="sans-serif" font-weight="bold">${t}</text>`; }
+function svgWrap(bgC, body){
+  return `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">${bg(bgC)}${body}</svg>`;
+}
+
+/* =========================================
+   小学1年生 漢字 80字  全データ
+   ========================================= */
+const KANJI_DATA = [
+
+  /* ── 自然 ── */
+  { kanji:'山', reading:'やま',
+    illust: svgWrap('#E3F2FD',
+      `<polygon points="50,8 15,80 85,80" fill="#6D8B74"/>
+       <polygon points="50,8 30,50 70,50" fill="#8FA87F"/>
+       <polygon points="50,8 42,30 58,30" fill="white"/>
+       <rect x="0" y="80" width="100" height="20" fill="#A0C878"/>
+       <circle cx="16" cy="28" r="9" fill="white" opacity=".8"/>
+       <circle cx="82" cy="22" r="7" fill="white" opacity=".75"/>`),
+    speech:'やま。山という漢字を覚えましょう！山の形に似ているね。',
+    questionSpeech:'やまという漢字はどれかな？' },
+
+  { kanji:'川', reading:'かわ',
+    illust: svgWrap('#E0F7FA',
+      `<path d="M20,5 Q26,30 20,55 Q14,75 20,95" stroke="#42A5F5" stroke-width="13" fill="none" stroke-linecap="round"/>
+       <path d="M50,5 Q56,30 50,55 Q44,75 50,95" stroke="#1E88E5" stroke-width="15" fill="none" stroke-linecap="round"/>
+       <path d="M80,5 Q86,30 80,55 Q74,75 80,95" stroke="#42A5F5" stroke-width="13" fill="none" stroke-linecap="round"/>
+       ${em('🐟','70','72','16')}`),
+    speech:'かわ。川という漢字を覚えましょう！川の流れに似ているね。',
+    questionSpeech:'かわという漢字はどれかな？' },
+
+  { kanji:'木', reading:'き',
+    illust: svgWrap('#F1F8E9',
+      `<rect x="46" y="56" width="8" height="38" rx="3" fill="#8B5E3C"/>
+       <circle cx="50" cy="36" r="30" fill="#4CAF50"/>
+       <circle cx="36" cy="46" r="18" fill="#388E3C"/>
+       <circle cx="64" cy="46" r="18" fill="#388E3C"/>
+       <circle cx="50" cy="22" r="20" fill="#66BB6A"/>`),
+    speech:'き。木という漢字を覚えましょう！木の形に似ているね。',
+    questionSpeech:'きという漢字はどれかな？' },
+
+  { kanji:'林', reading:'はやし',
+    illust: svgWrap('#C8E6C9',
+      `<rect x="20" y="58" width="8" height="36" rx="3" fill="#8B5E3C"/>
+       <circle cx="24" cy="40" r="22" fill="#388E3C"/>
+       <rect x="72" y="58" width="8" height="36" rx="3" fill="#8B5E3C"/>
+       <circle cx="76" cy="40" r="22" fill="#4CAF50"/>
+       ${em('🐿','50','80','16')}`),
+    speech:'はやし。林という漢字を覚えましょう！',
+    questionSpeech:'はやしという漢字はどれかな？' },
+
+  { kanji:'森', reading:'もり',
+    illust: svgWrap('#A5D6A7',
+      `<rect x="46" y="60" width="7" height="34" rx="3" fill="#6D4C41"/>
+       <circle cx="50" cy="42" r="24" fill="#1B5E20"/>
+       <rect x="17" y="65" width="6" height="28" rx="3" fill="#6D4C41"/>
+       <circle cx="20" cy="50" r="18" fill="#2E7D32"/>
+       <rect x="77" y="65" width="6" height="28" rx="3" fill="#6D4C41"/>
+       <circle cx="80" cy="50" r="18" fill="#2E7D32"/>
+       ${em('🦌','50','88','14')}`),
+    speech:'もり。森という漢字を覚えましょう！',
+    questionSpeech:'もりという漢字はどれかな？' },
+
+  { kanji:'花', reading:'はな',
+    illust: svgWrap('#FCE4EC',
+      `<rect x="47" y="58" width="6" height="36" rx="3" fill="#558B2F"/>
+       <path d="M47,72 Q32,66 30,53 Q42,60 47,70" fill="#66BB6A"/>
+       ${[0,45,90,135,180,225,270,315].map(a=>`<ellipse cx="50" cy="32" rx="10" ry="18" fill="${a%90===0?'#FF80AB':'#FF4081'}" transform="rotate(${a},50,50)"/>`).join('')}
+       <circle cx="50" cy="50" r="11" fill="#FFC107"/>
+       <circle cx="50" cy="50" r="6" fill="#FF8F00"/>`),
+    speech:'はな。花という漢字を覚えましょう！',
+    questionSpeech:'はなという漢字はどれかな？' },
+
+  { kanji:'草', reading:'くさ',
+    illust: svgWrap('#E8F5E9',
+      `<rect x="0" y="70" width="100" height="30" fill="#8BC34A"/>
+       ${[[18,68],[32,52],[50,58],[68,52],[82,66],[26,42],[54,40],[72,44]].map(([x,y])=>`
+       <path d="M${x},${y+20} Q${x-5},${y+5} ${x},${y}" stroke="#4CAF50" stroke-width="4" fill="none" stroke-linecap="round"/>
+       <path d="M${x},${y+20} Q${x+6},${y+8} ${x+9},${y+2}" stroke="#66BB6A" stroke-width="3" fill="none" stroke-linecap="round"/>`).join('')}
+       ${em('🐛','50','88','14')}`),
+    speech:'くさ。草という漢字を覚えましょう！',
+    questionSpeech:'くさという漢字はどれかな？' },
+
+  { kanji:'竹', reading:'たけ',
+    illust: svgWrap('#E8F5E9',
+      `${[20,50,80].map(x=>`
+       <rect x="${x-5}" y="10" width="10" height="80" rx="5" fill="#8BC34A"/>
+       ${[28,48,68].map(y=>`<rect x="${x-5}" y="${y}" width="10" height="4" fill="#7CB342"/>`).join('')}
+       <path d="M${x+5},${x<50?28:38} Q${x+(x<50?20:-20)},${x<50?18:25} ${x+(x<50?26:-28)},${x<50?10:15}" stroke="#A5D6A7" stroke-width="3" fill="none"/>`).join('')}
+       ${em('🐼','50','82','18')}`),
+    speech:'たけ。竹という漢字を覚えましょう！',
+    questionSpeech:'たけという漢字はどれかな？' },
+
+  { kanji:'米', reading:'こめ',
+    illust: svgWrap('#FFF8E1',
+      `${em('🌾','28','52','36')}${em('🌾','72','52','36')}${em('🍚','50','80','28')}`),
+    speech:'こめ。米という漢字を覚えましょう！',
+    questionSpeech:'こめという漢字はどれかな？' },
+
+  { kanji:'糸', reading:'いと',
+    illust: svgWrap('#FCE4EC',
+      `${em('🧵','50','48','56')}${em('🪡','22','72','22')}${em('✨','76','20','20')}`),
+    speech:'いと。糸という漢字を覚えましょう！',
+    questionSpeech:'いとという漢字はどれかな？' },
+
+  /* ── 天体・天気 ── */
+  { kanji:'日', reading:'ひ',
+    illust: svgWrap('#E3F2FD',
+      `<circle cx="50" cy="50" r="26" fill="#FFEB3B"/>
+       <circle cx="50" cy="50" r="17" fill="#FFC107"/>
+       ${[0,45,90,135,180,225,270,315].map(a=>`<line x1="${50+30*Math.cos(a*Math.PI/180)}" y1="${50+30*Math.sin(a*Math.PI/180)}" x2="${50+38*Math.cos(a*Math.PI/180)}" y2="${50+38*Math.sin(a*Math.PI/180)}" stroke="#FFD740" stroke-width="4" stroke-linecap="round"/>`).join('')}
+       <circle cx="43" cy="47" r="2.5" fill="#E65100"/>
+       <circle cx="57" cy="47" r="2.5" fill="#E65100"/>
+       <path d="M43,56 Q50,62 57,56" stroke="#E65100" stroke-width="2" fill="none"/>`),
+    speech:'ひ。日という漢字を覚えましょう！太陽の形に似ているね。',
+    questionSpeech:'ひという漢字はどれかな？' },
+
+  { kanji:'月', reading:'つき',
+    illust: svgWrap('#1A1A2E',
+      `<circle cx="55" cy="50" r="28" fill="#CFD8DC"/>
+       <circle cx="37" cy="48" r="28" fill="#1A1A2E"/>
+       <circle cx="62" cy="38" r="5" fill="#90A4AE" opacity=".5"/>
+       ${em('⭐','20','22','14')}${em('✨','85','35','12')}${em('⭐','12','72','10')}`),
+    speech:'つき。月という漢字を覚えましょう！三日月の形に似ているね。',
+    questionSpeech:'つきという漢字はどれかな？' },
+
+  { kanji:'火', reading:'ひ',
+    illust: svgWrap('#1C1C1C',
+      `<path d="M50,15 Q70,35 65,55 Q80,40 72,65 Q65,80 50,85 Q35,80 28,65 Q20,40 35,55 Q30,35 50,15Z" fill="#FF6F00"/>
+       <path d="M50,28 Q64,44 60,58 Q70,46 63,67 Q57,78 50,80 Q43,78 37,67 Q30,46 40,58 Q36,44 50,28Z" fill="#FFA726"/>
+       <path d="M50,42 Q58,53 55,63 Q60,57 57,68 Q53,75 50,76 Q47,75 43,68 Q40,57 45,63 Q42,53 50,42Z" fill="#FFEE58"/>
+       <circle cx="50" cy="65" r="7" fill="#FFF9C4" opacity=".8"/>`),
+    speech:'ひ。火という漢字を覚えましょう！炎の形に似ているね。',
+    questionSpeech:'ひという漢字はどれかな？' },
+
+  { kanji:'水', reading:'みず',
+    illust: svgWrap('#E0F7FA',
+      `<path d="M50,12 Q70,38 70,56 Q70,76 50,82 Q30,76 30,56 Q30,38 50,12Z" fill="#29B6F6"/>
+       <ellipse cx="42" cy="46" rx="5" ry="8" fill="white" opacity=".35" transform="rotate(-20,42,46)"/>
+       <path d="M22,48 Q30,60 22,66 Q14,60 22,48Z" fill="#4FC3F7"/>
+       <path d="M78,43 Q86,55 78,61 Q70,55 78,43Z" fill="#4FC3F7"/>
+       ${em('💧','50','92','14')}`),
+    speech:'みず。水という漢字を覚えましょう！水の形に似ているね。',
+    questionSpeech:'みずという漢字はどれかな？' },
+
+  { kanji:'土', reading:'つち',
+    illust: svgWrap('#FFF8E1',
+      `<rect x="0" y="64" width="100" height="36" fill="#8D6E63"/>
+       <rect x="0" y="64" width="100" height="6" fill="#A1887F"/>
+       <rect x="47" y="28" width="6" height="38" fill="#558B2F"/>
+       <ellipse cx="50" cy="26" rx="16" ry="16" fill="#FFEE58"/>
+       <circle cx="50" cy="26" r="9" fill="#FF8F00"/>
+       ${em('🌱','22','62','18')}`),
+    speech:'つち。土という漢字を覚えましょう！',
+    questionSpeech:'つちという漢字はどれかな？' },
+
+  { kanji:'空', reading:'そら',
+    illust: svgWrap('#87CEEB',
+      `<circle cx="20" cy="42" r="14" fill="white"/><circle cx="36" cy="32" r="18" fill="white"/>
+       <circle cx="55" cy="30" r="20" fill="white"/><circle cx="73" cy="36" r="16" fill="white"/>
+       <circle cx="83" cy="45" r="12" fill="white"/>
+       ${em('🐦','50','74','22')}
+       <circle cx="70" cy="16" r="10" fill="#FFEB3B"/>
+       ${[0,60,120,180,240,300].map(a=>`<line x1="${70+14*Math.cos(a*Math.PI/180)}" y1="${16+14*Math.sin(a*Math.PI/180)}" x2="${70+18*Math.cos(a*Math.PI/180)}" y2="${16+18*Math.sin(a*Math.PI/180)}" stroke="#FFC107" stroke-width="2.5" stroke-linecap="round"/>`).join('')}`),
+    speech:'そら。空という漢字を覚えましょう！',
+    questionSpeech:'そらという漢字はどれかな？' },
+
+  { kanji:'雨', reading:'あめ',
+    illust: svgWrap('#B0BEC5',
+      `<rect x="10" y="14" width="80" height="32" rx="16" fill="#78909C"/>
+       ${[[25,56],[40,66],[55,56],[70,66],[32,76],[62,76],[47,83]].map(([x,y])=>`<ellipse cx="${x}" cy="${y}" rx="3" ry="6" fill="#42A5F5"/>`).join('')}`),
+    speech:'あめ。雨という漢字を覚えましょう！',
+    questionSpeech:'あめという漢字はどれかな？' },
+
+  /* ── 人・体 ── */
+  { kanji:'人', reading:'ひと',
+    illust: svgWrap('#FFF3E0',
+      `<circle cx="50" cy="22" r="14" fill="#FFCC80"/>
+       <path d="M28,78 Q35,45 50,40 Q65,45 72,78" fill="#42A5F5"/>
+       <path d="M50,50 Q28,63 22,74" stroke="#FFCC80" stroke-width="9" fill="none" stroke-linecap="round"/>
+       <path d="M50,50 Q72,63 78,74" stroke="#FFCC80" stroke-width="9" fill="none" stroke-linecap="round"/>
+       <rect x="36" y="76" width="11" height="18" rx="5" fill="#1565C0"/>
+       <rect x="53" y="76" width="11" height="18" rx="5" fill="#1565C0"/>`),
+    speech:'ひと。人という漢字を覚えましょう！人が歩く形に似ているね。',
+    questionSpeech:'ひとという漢字はどれかな？' },
+
+  { kanji:'女', reading:'おんな',
+    illust: svgWrap('#FCE4EC', `${em('👩','50','46','52')}${em('🌸','78','22','20')}`),
+    speech:'おんな。女という漢字を覚えましょう！',
+    questionSpeech:'おんなという漢字はどれかな？' },
+
+  { kanji:'男', reading:'おとこ',
+    illust: svgWrap('#E3F2FD', `${em('👦','50','46','52')}${em('⚽','78','72','22')}`),
+    speech:'おとこ。男という漢字を覚えましょう！',
+    questionSpeech:'おとこという漢字はどれかな？' },
+
+  { kanji:'子', reading:'こ',
+    illust: svgWrap('#FCE4EC', `${em('👶','50','46','52')}${em('🎈','30','20','20')}${em('🎈','72','22','18')}`),
+    speech:'こ。子という漢字を覚えましょう！',
+    questionSpeech:'こという漢字はどれかな？' },
+
+  { kanji:'口', reading:'くち',
+    illust: svgWrap('#FCE4EC',
+      `<circle cx="50" cy="48" r="38" fill="#FFCC80"/>
+       <circle cx="36" cy="40" r="7" fill="white"/><circle cx="64" cy="40" r="7" fill="white"/>
+       <circle cx="37" cy="41" r="4" fill="#333"/><circle cx="65" cy="41" r="4" fill="#333"/>
+       <rect x="26" y="56" width="48" height="28" rx="14" fill="#E53935"/>
+       <rect x="28" y="56" width="44" height="13" rx="8" fill="#FF8A80"/>
+       <rect x="30" y="56" width="10" height="11" rx="2" fill="white"/>
+       <rect x="44" y="56" width="12" height="11" rx="2" fill="white"/>
+       <rect x="60" y="56" width="10" height="11" rx="2" fill="white"/>
+       <ellipse cx="50" cy="76" rx="13" ry="7" fill="#FF7043"/>`),
+    speech:'くち。口という漢字を覚えましょう！口の形に似ているね。',
+    questionSpeech:'くちという漢字はどれかな？' },
+
+  { kanji:'目', reading:'め',
+    illust: svgWrap('#E8EAF6',
+      `<ellipse cx="50" cy="50" rx="40" ry="26" fill="white" stroke="#3E2723" stroke-width="3"/>
+       <circle cx="50" cy="50" r="18" fill="#42A5F5"/>
+       <circle cx="50" cy="50" r="12" fill="#1565C0"/>
+       <circle cx="50" cy="50" r="7"  fill="#0D1B2A"/>
+       <circle cx="47" cy="46" r="3"  fill="white"/>
+       <circle cx="54" cy="52" r="2"  fill="white" opacity=".7"/>`),
+    speech:'め。目という漢字を覚えましょう！目の形に似ているね。',
+    questionSpeech:'めという漢字はどれかな？' },
+
+  { kanji:'耳', reading:'みみ',
+    illust: svgWrap('#FFF8E1',
+      `${em('🎵','18','28','18')}${em('🎶','72','20','16')}
+       <ellipse cx="42" cy="50" rx="30" ry="38" fill="#FFCC80"/>
+       <path d="M65,28 Q82,34 84,50 Q82,66 65,72 Q74,66 72,50 Q74,34 65,28Z" fill="#FFB74D"/>
+       <path d="M68,36 Q78,42 78,50 Q78,58 68,64 Q73,58 72,50 Q73,42 68,36Z" fill="#FF8A65"/>`),
+    speech:'みみ。耳という漢字を覚えましょう！',
+    questionSpeech:'みみという漢字はどれかな？' },
+
+  { kanji:'手', reading:'て',
+    illust: svgWrap('#E8F5E9',
+      `<ellipse cx="50" cy="68" rx="26" ry="22" fill="#FFCC80"/>
+       <rect x="28" y="28" width="11" height="32" rx="5.5" fill="#FFCC80"/>
+       <rect x="41" y="22" width="11" height="34" rx="5.5" fill="#FFCC80"/>
+       <rect x="54" y="24" width="11" height="32" rx="5.5" fill="#FFCC80"/>
+       <rect x="67" y="30" width="11" height="28" rx="5.5" fill="#FFCC80"/>
+       <ellipse cx="22" cy="60" rx="8" ry="12" fill="#FFCC80" transform="rotate(-30,22,60)"/>
+       ${em('✨','80','20','18')}`),
+    speech:'て。手という漢字を覚えましょう！',
+    questionSpeech:'てという漢字はどれかな？' },
+
+  { kanji:'足', reading:'あし',
+    illust: svgWrap('#FFF3E0',
+      `<rect x="36" y="10" width="18" height="55" rx="9" fill="#FFCC80"/>
+       <ellipse cx="55" cy="72" rx="28" ry="16" fill="#FFCC80"/>
+       ${[[32,68,7],[42,64,7],[53,62,7],[64,63,6],[74,66,5]].map(([x,y,r])=>`<circle cx="${x}" cy="${y}" r="${r}" fill="#FFB74D"/>`).join('')}`),
+    speech:'あし。足という漢字を覚えましょう！',
+    questionSpeech:'あしという漢字はどれかな？' },
+
+  { kanji:'力', reading:'ちから',
+    illust: svgWrap('#FFF3E0', `${em('💪','50','52','62')}${lbl('ちから！','#E65100')}`),
+    speech:'ちから。力という漢字を覚えましょう！',
+    questionSpeech:'ちからという漢字はどれかな？' },
+
+  /* ── 方向・場所 ── */
+  { kanji:'上', reading:'うえ',
+    illust: svgWrap('#E3F2FD',
+      `<rect x="10" y="72" width="80" height="7" rx="3" fill="#8D6E63"/>
+       <polygon points="50,8 34,32 66,32" fill="#2196F3"/>
+       <rect x="43" y="31" width="14" height="26" fill="#2196F3"/>
+       ${em('🐦','50','56','18')}`),
+    speech:'うえ。上という漢字を覚えましょう！',
+    questionSpeech:'うえという漢字はどれかな？' },
+
+  { kanji:'下', reading:'した',
+    illust: svgWrap('#FFF8E1',
+      `<rect x="10" y="20" width="80" height="7" rx="3" fill="#8D6E63"/>
+       <rect x="43" y="27" width="14" height="26" fill="#FF7043"/>
+       <polygon points="50,82 34,58 66,58" fill="#FF7043"/>
+       ${em('🍎','30','22','18')}${em('🍊','65','22','16')}`),
+    speech:'した。下という漢字を覚えましょう！',
+    questionSpeech:'したという漢字はどれかな？' },
+
+  { kanji:'中', reading:'なか',
+    illust: svgWrap('#F3E5F5',
+      `<rect x="18" y="18" width="64" height="64" rx="8" fill="none" stroke="#AB47BC" stroke-width="6"/>
+       <line x1="50" y1="8" x2="50" y2="92" stroke="#AB47BC" stroke-width="6"/>
+       ${em('⭐','50','52','28')}`),
+    speech:'なか。中という漢字を覚えましょう！',
+    questionSpeech:'なかという漢字はどれかな？' },
+
+  { kanji:'右', reading:'みぎ',
+    illust: svgWrap('#FFF3E0', `${em('👉','50','50','52')}${lbl('みぎ','#E65100')}`),
+    speech:'みぎ。右という漢字を覚えましょう！',
+    questionSpeech:'みぎという漢字はどれかな？' },
+
+  { kanji:'左', reading:'ひだり',
+    illust: svgWrap('#E8F5E9', `${em('👈','50','50','52')}${lbl('ひだり','#2E7D32')}`),
+    speech:'ひだり。左という漢字を覚えましょう！',
+    questionSpeech:'ひだりという漢字はどれかな？' },
+
+  /* ── 数字 ── */
+  { kanji:'一', reading:'いち',
+    illust: svgWrap('#FFF8E1',
+      `<line x1="18" y1="50" x2="82" y2="50" stroke="#FF7043" stroke-width="10" stroke-linecap="round"/>
+       ${em('🍎','50','24','22')}${lbl('１つ','#E65100')}`),
+    speech:'いち。一という漢字を覚えましょう！',
+    questionSpeech:'いちという漢字はどれかな？' },
+
+  { kanji:'二', reading:'に',
+    illust: svgWrap('#FFF3E0',
+      `<line x1="18" y1="38" x2="82" y2="38" stroke="#FF7043" stroke-width="8" stroke-linecap="round"/>
+       <line x1="18" y1="60" x2="82" y2="60" stroke="#FF7043" stroke-width="8" stroke-linecap="round"/>
+       ${em('🍎','32','22','18')}${em('🍊','62','22','18')}${lbl('２つ','#E65100')}`),
+    speech:'に。二という漢字を覚えましょう！',
+    questionSpeech:'にという漢字はどれかな？' },
+
+  { kanji:'三', reading:'さん',
+    illust: svgWrap('#FFF8E1',
+      `<line x1="18" y1="30" x2="82" y2="30" stroke="#FF7043" stroke-width="7" stroke-linecap="round"/>
+       <line x1="18" y1="50" x2="82" y2="50" stroke="#FF7043" stroke-width="7" stroke-linecap="round"/>
+       <line x1="18" y1="70" x2="82" y2="70" stroke="#FF7043" stroke-width="7" stroke-linecap="round"/>
+       ${em('🎈','22','18','14')}${em('🎈','50','18','14')}${em('🎈','78','18','14')}`),
+    speech:'さん。三という漢字を覚えましょう！',
+    questionSpeech:'さんという漢字はどれかな？' },
+
+  { kanji:'四', reading:'よん',
+    illust: svgWrap('#FCE4EC',
+      `${em('🐾','28','38','26')}${em('🐾','65','38','26')}${em('🐾','28','72','26')}${em('🐾','65','72','26')}${lbl('４つ','#C2185B')}`),
+    speech:'よん。四という漢字を覚えましょう！',
+    questionSpeech:'よんという漢字はどれかな？' },
+
+  { kanji:'五', reading:'ご',
+    illust: svgWrap('#E8F5E9',
+      `${em('⭐','22','36','22')}${em('⭐','50','28','22')}${em('⭐','78','36','22')}${em('⭐','32','66','22')}${em('⭐','68','66','22')}${lbl('５つ','#2E7D32')}`),
+    speech:'ご。五という漢字を覚えましょう！',
+    questionSpeech:'ごという漢字はどれかな？' },
+
+  { kanji:'六', reading:'ろく',
+    illust: svgWrap('#E3F2FD',
+      `${em('🍭','18','32','20')}${em('🍭','50','26','20')}${em('🍭','82','32','20')}${em('🍭','18','68','20')}${em('🍭','50','74','20')}${em('🍭','82','68','20')}${lbl('６つ','#1565C0')}`),
+    speech:'ろく。六という漢字を覚えましょう！',
+    questionSpeech:'ろくという漢字はどれかな？' },
+
+  { kanji:'七', reading:'なな',
+    illust: svgWrap('#FFF8E1',
+      `${em('🌟','15','30','18')}${em('🌟','40','22','18')}${em('🌟','65','28','18')}${em('🌟','85','20','18')}${em('🌟','25','58','18')}${em('🌟','52','64','18')}${em('🌟','76','55','18')}${lbl('７つ','#F57F17')}`),
+    speech:'なな。七という漢字を覚えましょう！',
+    questionSpeech:'ななという漢字はどれかな？' },
+
+  { kanji:'八', reading:'はち',
+    illust: svgWrap('#FCE4EC',
+      `${em('🎀','18','34','18')}${em('🎀','43','28','18')}${em('🎀','68','34','18')}${em('🎀','10','62','18')}${em('🎀','33','68','18')}${em('🎀','55','62','18')}${em('🎀','75','56','18')}${em('🎀','90','68','18')}${lbl('８つ','#C2185B')}`),
+    speech:'はち。八という漢字を覚えましょう！',
+    questionSpeech:'はちという漢字はどれかな？' },
+
+  { kanji:'九', reading:'きゅう',
+    illust: svgWrap('#E8F5E9',
+      `${[['🍓',15,30],['🍓',38,24],['🍓',62,28],['🍓',83,22],['🍓',10,58],['🍓',32,65],['🍓',55,62],['🍓',75,58],['🍓',90,68]].map(([e,x,y])=>em(e,x,y,'18')).join('')}${lbl('９つ','#2E7D32')}`),
+    speech:'きゅう。九という漢字を覚えましょう！',
+    questionSpeech:'きゅうという漢字はどれかな？' },
+
+  { kanji:'十', reading:'じゅう',
+    illust: svgWrap('#FFF3E0',
+      `<line x1="50" y1="12" x2="50" y2="88" stroke="#FF7043" stroke-width="10" stroke-linecap="round"/>
+       <line x1="12" y1="50" x2="88" y2="50" stroke="#FF7043" stroke-width="10" stroke-linecap="round"/>
+       ${lbl('10！','#E65100')}`),
+    speech:'じゅう。十という漢字を覚えましょう！',
+    questionSpeech:'じゅうという漢字はどれかな？' },
+
+  { kanji:'百', reading:'ひゃく',
+    illust: svgWrap('#E8EAF6', `${em('💯','50','52','60')}${lbl('100！','#3949AB')}`),
+    speech:'ひゃく。百という漢字を覚えましょう！',
+    questionSpeech:'ひゃくという漢字はどれかな？' },
+
+  { kanji:'千', reading:'せん',
+    illust: svgWrap('#F3E5F5', `${em('🌸','50','40','50')}${em('✨','20','22','20')}${em('✨','80','18','18')}${lbl('1000！','#7B1FA2')}`),
+    speech:'せん。千という漢字を覚えましょう！',
+    questionSpeech:'せんという漢字はどれかな？' },
+
+  /* ── 大小 ── */
+  { kanji:'大', reading:'おおきい',
+    illust: svgWrap('#FFF8E1', `${em('🐘','50','52','60')}${lbl('おおきい！','#E65100')}`),
+    speech:'おおきい。大という漢字を覚えましょう！',
+    questionSpeech:'おおきいという漢字はどれかな？' },
+
+  { kanji:'小', reading:'ちいさい',
+    illust: svgWrap('#E8F5E9', `${em('🐭','50','50','44')}${em('🐜','22','75','24')}${em('🌱','76','72','22')}${lbl('ちいさい','#2E7D32')}`),
+    speech:'ちいさい。小という漢字を覚えましょう！',
+    questionSpeech:'ちいさいという漢字はどれかな？' },
+
+  /* ── 色 ── */
+  { kanji:'白', reading:'しろ',
+    illust: svgWrap('#FAFAFA',
+      `<circle cx="50" cy="45" r="32" fill="white" stroke="#E0E0E0" stroke-width="3"/>
+       ${em('🐑','50','46','40')}${lbl('しろ','#757575')}`),
+    speech:'しろ。白という漢字を覚えましょう！',
+    questionSpeech:'しろという漢字はどれかな？' },
+
+  { kanji:'赤', reading:'あか',
+    illust: svgWrap('#FFEBEE', `${em('🍎','35','45','36')}${em('🌹','65','48','34')}${em('❤️','50','82','22')}`),
+    speech:'あか。赤という漢字を覚えましょう！',
+    questionSpeech:'あかという漢字はどれかな？' },
+
+  { kanji:'青', reading:'あお',
+    illust: svgWrap('#E3F2FD', `${em('🫐','35','45','34')}${em('🌊','65','52','32')}${em('💙','50','80','22')}`),
+    speech:'あお。青という漢字を覚えましょう！',
+    questionSpeech:'あおという漢字はどれかな？' },
+
+  /* ── 自然物・物 ── */
+  { kanji:'石', reading:'いし',
+    illust: svgWrap('#ECEFF1',
+      `<ellipse cx="38" cy="62" rx="28" ry="20" fill="#9E9E9E"/>
+       <ellipse cx="38" cy="56" rx="26" ry="18" fill="#BDBDBD"/>
+       <ellipse cx="33" cy="52" rx="10" ry="6" fill="#E0E0E0" opacity=".7"/>
+       <circle cx="68" cy="60" r="14" fill="#9E9E9E"/>
+       <circle cx="65" cy="55" r="8" fill="#BDBDBD"/>
+       ${em('💎','76','26','20')}`),
+    speech:'いし。石という漢字を覚えましょう！',
+    questionSpeech:'いしという漢字はどれかな？' },
+
+  { kanji:'金', reading:'きん',
+    illust: svgWrap('#FFF8E1', `${em('🪙','35','45','36')}${em('💰','68','52','34')}${em('✨','22','22','18')}`),
+    speech:'きん。金という漢字を覚えましょう！',
+    questionSpeech:'きんという漢字はどれかな？' },
+
+  /* ── 動物 ── */
+  { kanji:'犬', reading:'いぬ',
+    illust: svgWrap('#FFF8E1', `${em('🐶','50','54','58')}${lbl('わんわん！','#8B4513')}`),
+    speech:'いぬ。犬という漢字を覚えましょう！',
+    questionSpeech:'いぬという漢字はどれかな？' },
+
+  { kanji:'貝', reading:'かい',
+    illust: svgWrap('#E0F7FA', `${em('🐚','30','52','40')}${em('🦀','68','60','32')}${em('🐠','55','25','24')}`),
+    speech:'かい。貝という漢字を覚えましょう！',
+    questionSpeech:'かいという漢字はどれかな？' },
+
+  { kanji:'虫', reading:'むし',
+    illust: svgWrap('#F9FBE7', `${em('🐛','30','55','36')}${em('🐝','68','38','28')}${em('🦋','55','72','24')}${em('🐞','22','78','20')}`),
+    speech:'むし。虫という漢字を覚えましょう！',
+    questionSpeech:'むしという漢字はどれかな？' },
+
+  /* ── 場所・建物 ── */
+  { kanji:'田', reading:'た',
+    illust: svgWrap('#E8F5E9',
+      `<rect x="12" y="12" width="76" height="76" rx="4" fill="#A5D6A7"/>
+       <line x1="12" y1="50" x2="88" y2="50" stroke="#558B2F" stroke-width="4"/>
+       <line x1="50" y1="12" x2="50" y2="88" stroke="#558B2F" stroke-width="4"/>
+       <rect x="12" y="12" width="76" height="76" rx="4" fill="none" stroke="#558B2F" stroke-width="4"/>
+       ${em('🌾','28','35','16')}${em('🌾','62','35','16')}${em('🌾','28','66','16')}${em('🌾','62','66','16')}`),
+    speech:'た。田という漢字を覚えましょう！田んぼの形に似ているね。',
+    questionSpeech:'たという漢字はどれかな？' },
+
+  { kanji:'町', reading:'まち',
+    illust: svgWrap('#FFF3E0', `${em('🏘️','50','46','52')}${lbl('まち','#E65100')}`),
+    speech:'まち。町という漢字を覚えましょう！',
+    questionSpeech:'まちという漢字はどれかな？' },
+
+  { kanji:'村', reading:'むら',
+    illust: svgWrap('#E8F5E9', `${em('🏡','50','46','50')}${em('🌲','20','58','24')}${em('🌲','80','55','22')}`),
+    speech:'むら。村という漢字を覚えましょう！',
+    questionSpeech:'むらという漢字はどれかな？' },
+
+  /* ── 学校・学習 ── */
+  { kanji:'学', reading:'まなぶ',
+    illust: svgWrap('#E3F2FD', `${em('📚','35','45','38')}${em('✏️','68','52','32')}${em('🎓','50','18','28')}`),
+    speech:'まなぶ。学という漢字を覚えましょう！',
+    questionSpeech:'まなぶという漢字はどれかな？' },
+
+  { kanji:'校', reading:'こう',
+    illust: svgWrap('#FFF3E0', `${em('🏫','50','48','55')}${lbl('がっこう','#E65100')}`),
+    speech:'こう。校という漢字を覚えましょう！',
+    questionSpeech:'こうという漢字はどれかな？' },
+
+  { kanji:'先', reading:'さき',
+    illust: svgWrap('#E8F5E9', `${em('🏃','50','50','50')}${em('➡️','78','50','22')}${lbl('さきにいく','#2E7D32')}`),
+    speech:'さき。先という漢字を覚えましょう！',
+    questionSpeech:'さきという漢字はどれかな？' },
+
+  { kanji:'生', reading:'うまれる',
+    illust: svgWrap('#F1F8E9', `${em('🐣','50','46','52')}${em('🌱','22','72','22')}${em('🌸','78','68','22')}`),
+    speech:'うまれる。生という漢字を覚えましょう！',
+    questionSpeech:'うまれるという漢字はどれかな？' },
+
+  { kanji:'本', reading:'ほん',
+    illust: svgWrap('#FFF3E0', `${em('📚','50','44','52')}${em('📖','72','72','24')}`),
+    speech:'ほん。本という漢字を覚えましょう！',
+    questionSpeech:'ほんという漢字はどれかな？' },
+
+  { kanji:'文', reading:'ぶん',
+    illust: svgWrap('#E8EAF6', `${em('📜','50','44','52')}${em('✍️','72','68','24')}`),
+    speech:'ぶん。文という漢字を覚えましょう！',
+    questionSpeech:'ぶんという漢字はどれかな？' },
+
+  { kanji:'字', reading:'じ',
+    illust: svgWrap('#E3F2FD', `${em('🔤','50','44','52')}${em('✏️','72','22','24')}`),
+    speech:'じ。字という漢字を覚えましょう！',
+    questionSpeech:'じという漢字はどれかな？' },
+
+  { kanji:'名', reading:'な',
+    illust: svgWrap('#FCE4EC', `${em('📛','50','44','52')}${em('✨','22','22','20')}`),
+    speech:'な。名という漢字を覚えましょう！',
+    questionSpeech:'なという漢字はどれかな？' },
+
+  { kanji:'書', reading:'かく',
+    illust: svgWrap('#FFF3E0', `${em('📝','50','46','54')}${em('✏️','72','22','24')}`),
+    speech:'かく。書という漢字を覚えましょう！',
+    questionSpeech:'かくという漢字はどれかな？' },
+
+  { kanji:'読', reading:'よむ',
+    illust: svgWrap('#E8F5E9', `${em('📖','50','46','54')}${em('🔖','72','30','22')}`),
+    speech:'よむ。読という漢字を覚えましょう！',
+    questionSpeech:'よむという漢字はどれかな？' },
+
+  { kanji:'音', reading:'おと',
+    illust: svgWrap('#FFF8E1', `${em('🎵','35','44','36')}${em('🎶','68','50','32')}${em('🎸','50','78','24')}`),
+    speech:'おと。音という漢字を覚えましょう！',
+    questionSpeech:'おとという漢字はどれかな？' },
+
+  { kanji:'気', reading:'き',
+    illust: svgWrap('#E8F5E9', `${em('☁️','35','32','36')}${em('⚡','65','40','30')}${em('😊','50','72','28')}`),
+    speech:'き。気という漢字を覚えましょう！',
+    questionSpeech:'きという漢字はどれかな？' },
+
+  /* ── 動作 ── */
+  { kanji:'立', reading:'たつ',
+    illust: svgWrap('#FFF3E0', `${em('🧍','50','46','56')}${lbl('たっている','#E65100')}`),
+    speech:'たつ。立という漢字を覚えましょう！',
+    questionSpeech:'たつという漢字はどれかな？' },
+
+  { kanji:'見', reading:'みる',
+    illust: svgWrap('#E8F5E9', `${em('👀','50','40','44')}${em('🔍','65','68','28')}`),
+    speech:'みる。見という漢字を覚えましょう！',
+    questionSpeech:'みるという漢字はどれかな？' },
+
+  { kanji:'聞', reading:'きく',
+    illust: svgWrap('#FFF8E1', `${em('👂','40','46','44')}${em('🎵','70','36','26')}${em('🎶','72','60','20')}`),
+    speech:'きく。聞という漢字を覚えましょう！',
+    questionSpeech:'きくという漢字はどれかな？' },
+
+  { kanji:'話', reading:'はなす',
+    illust: svgWrap('#FCE4EC', `${em('🗣️','38','46','42')}${em('💬','65','32','30')}`),
+    speech:'はなす。話という漢字を覚えましょう！',
+    questionSpeech:'はなすという漢字はどれかな？' },
+
+  { kanji:'食', reading:'たべる',
+    illust: svgWrap('#FFF3E0', `${em('🍜','50','44','52')}${em('😋','50','82','22')}`),
+    speech:'たべる。食という漢字を覚えましょう！',
+    questionSpeech:'たべるという漢字はどれかな？' },
+
+  { kanji:'出', reading:'でる',
+    illust: svgWrap('#FFF8E1',
+      `${em('🚪','50','55','46')}
+       <polygon points="50,8 36,32 64,32" fill="#FF7043"/>
+       <rect x="43" y="30" width="14" height="18" fill="#FF7043"/>
+       ${em('🏃','70','60','26')}`),
+    speech:'でる。出という漢字を覚えましょう！',
+    questionSpeech:'でるという漢字はどれかな？' },
+
+  { kanji:'入', reading:'いる',
+    illust: svgWrap('#E3F2FD',
+      `${em('🏠','50','40','50')}
+       <polygon points="50,74 36,55 64,55" fill="#2196F3"/>
+       <rect x="43" y="72" width="14" height="20" fill="#2196F3"/>`),
+    speech:'いる。入という漢字を覚えましょう！',
+    questionSpeech:'いるという漢字はどれかな？' },
+
+  { kanji:'休', reading:'やすむ',
+    illust: svgWrap('#E8F5E9', `${em('😴','50','44','48')}${em('💤','72','28','24')}${em('🌳','22','60','28')}`),
+    speech:'やすむ。休という漢字を覚えましょう！',
+    questionSpeech:'やすむという漢字はどれかな？' },
+
+  /* ── 時間・年 ── */
+  { kanji:'年', reading:'とし',
+    illust: svgWrap('#FFF8E1', `${em('📅','50','45','50')}${em('🎂','50','78','22')}${lbl('１ねん','#F57F17')}`),
+    speech:'とし。年という漢字を覚えましょう！',
+    questionSpeech:'としという漢字はどれかな？' },
+
+  { kanji:'早', reading:'はやい',
+    illust: svgWrap('#FFF8E1', `${em('🐆','50','46','50')}${em('💨','72','30','24')}${lbl('はやい！','#E65100')}`),
+    speech:'はやい。早という漢字を覚えましょう！',
+    questionSpeech:'はやいという漢字はどれかな？' },
+
+  { kanji:'夕', reading:'ゆう',
+    illust: svgWrap('#FFCC80',
+      `<circle cx="85" cy="60" r="20" fill="#FFCC02"/>
+       <circle cx="62" cy="40" r="22" fill="#FF7043"/>
+       <rect x="0" y="78" width="100" height="22" fill="#4E342E"/>
+       ${em('🐦','30','35','18')}`),
+    speech:'ゆう。夕という漢字を覚えましょう！',
+    questionSpeech:'ゆうという漢字はどれかな？' },
+
+  { kanji:'天', reading:'てん',
+    illust: svgWrap('#87CEEB', `${em('🌤️','50','42','56')}${em('✨','20','18','20')}${em('✨','80','14','16')}`),
+    speech:'てん。天という漢字を覚えましょう！',
+    questionSpeech:'てんという漢字はどれかな？' },
+
+  /* ── 王・玉 ── */
+  { kanji:'王', reading:'おう',
+    illust: svgWrap('#FFF8E1', `${em('👑','50','38','48')}${em('💎','50','78','24')}${lbl('おうさま','#F57F17')}`),
+    speech:'おう。王という漢字を覚えましょう！',
+    questionSpeech:'おうという漢字はどれかな？' },
+
+  { kanji:'玉', reading:'たま',
+    illust: svgWrap('#E8EAF6', `${em('💎','35','45','36')}${em('🔮','68','52','32')}${em('✨','22','22','18')}`),
+    speech:'たま。玉という漢字を覚えましょう！',
+    questionSpeech:'たまという漢字はどれかな？' },
+
+  { kanji:'円', reading:'えん',
+    illust: svgWrap('#FFF8E1', `${em('💴','50','48','56')}${lbl('おかね','#F57F17')}`),
+    speech:'えん。円という漢字を覚えましょう！',
+    questionSpeech:'えんという漢字はどれかな？' },
+
+  /* ── 正・車 ── */
+  { kanji:'正', reading:'ただしい',
+    illust: svgWrap('#E8F5E9', `${em('✅','50','44','56')}${lbl('ただしい','#2E7D32')}`),
+    speech:'ただしい。正という漢字を覚えましょう！',
+    questionSpeech:'ただしいという漢字はどれかな？' },
+
+  { kanji:'車', reading:'くるま',
+    illust: svgWrap('#E3F2FD', `${em('🚗','50','46','56')}${lbl('ぶっぶー','#1565C0')}`),
+    speech:'くるま。車という漢字を覚えましょう！',
+    questionSpeech:'くるまという漢字はどれかな？' },
+
+];
+
+/* =========================================
+   重複除去
+   ========================================= */
+(function(){
+  const seen=new Set(); let i=0;
+  while(i<KANJI_DATA.length){ if(seen.has(KANJI_DATA[i].kanji)){KANJI_DATA.splice(i,1);}else{seen.add(KANJI_DATA[i].kanji);i++;} }
+})();
+
+/* =========================================
+   不足分を自動補完（残りの小1漢字）
+   ========================================= */
+const SUPPLEMENT = [
+  ['正','ただしい','✅'],['早','はやい','⏩'],['草','くさ','🌿'],['糸','いと','🧵'],
+  ['竹','たけ','🎋'],['虫','むし','🐛'],['貝','かい','🐚'],['犬','いぬ','🐶'],
+  ['力','ちから','💪'],['音','おと','🎵'],['気','き','💨'],['文','ぶん','📜'],
+  ['名','な','📛'],['字','じ','🔤'],['本','ほん','📚'],['円','えん','💴'],
+  ['玉','たま','💎'],['王','おう','👑'],['正','ただしい','✅'],
+];
+(function(){
+  const seen=new Set(KANJI_DATA.map(k=>k.kanji));
+  const bgs=['#FFF8F0','#E8F5E9','#E3F2FD','#FCE4EC','#F3E5F5','#FFF3E0'];
+  for(const[k,r,e] of SUPPLEMENT){
+    if(!seen.has(k) && KANJI_DATA.length<80){
+      KANJI_DATA.push({
+        kanji:k, reading:r,
+        illust:svgWrap(bgs[KANJI_DATA.length%bgs.length],`${em(e,'50','48','58')}${lbl(r,'#555')}`),
+        speech:`${r}。${k}という漢字を覚えましょう！`,
+        questionSpeech:`${r}という漢字はどれかな？`
+      });
+      seen.add(k);
+    }
+  }
+})();
+
+/* ===========================
+   APP STATE
+   =========================== */
+const State={
+  sound:true, difficulty:'easy',
+  currentKanjiSet:[], questionQueue:[], currentQ:null,
+  score:0, combo:0, maxCombo:0, totalQuestions:10, answered:0, results:[],
+  learnedKanji:new Set(), bestStreak:0, totalCorrect:0, totalGames:0,
+};
+
+/* ===========================
+   STORAGE
+   =========================== */
+const Store={
+  save(){
+    try{ localStorage.setItem('kanjiApp',JSON.stringify({
+      sound:State.sound, difficulty:State.difficulty, bestStreak:State.bestStreak,
+      totalCorrect:State.totalCorrect, totalGames:State.totalGames,
+      learnedKanji:[...State.learnedKanji],
+    }));}catch(e){}
+  },
+  load(){
+    try{
+      const d=JSON.parse(localStorage.getItem('kanjiApp')||'{}');
+      if(d.sound!==undefined) State.sound=d.sound;
+      if(d.difficulty)        State.difficulty=d.difficulty;
+      if(d.bestStreak)        State.bestStreak=d.bestStreak;
+      if(d.totalCorrect)      State.totalCorrect=d.totalCorrect;
+      if(d.totalGames)        State.totalGames=d.totalGames;
+      if(d.learnedKanji)      State.learnedKanji=new Set(d.learnedKanji);
+    }catch(e){}
+  },
+};
+
+/* ===========================
+   SPEECH
+   =========================== */
+const Speech={
+  say(t){ if(!State.sound||!window.speechSynthesis) return;
+    window.speechSynthesis.cancel();
+    const u=new SpeechSynthesisUtterance(t);
+    u.lang='ja-JP'; u.rate=0.85; u.pitch=1.2;
+    window.speechSynthesis.speak(u); },
+  cancel(){ if(window.speechSynthesis) window.speechSynthesis.cancel(); }
+};
+
+/* ===========================
+   CONFETTI
+   =========================== */
+const Confetti=(()=>{
+  let canvas,ctx,particles=[],raf=null;
+  const COLS=['#FF6B9D','#FFD700','#5B8DEF','#4ECDC4','#A855F7','#FF8C42'];
+  function init(){ canvas=document.getElementById('confettiCanvas'); ctx=canvas.getContext('2d'); resize(); window.addEventListener('resize',resize); }
+  function resize(){ canvas.width=window.innerWidth; canvas.height=window.innerHeight; }
+  function burst(n=80){
+    const cx=window.innerWidth/2, cy=window.innerHeight/3;
+    for(let i=0;i<n;i++){
+      const a=Math.random()*Math.PI*2, s=4+Math.random()*10;
+      particles.push({x:cx+(Math.random()-.5)*60,y:cy,vx:Math.cos(a)*s,vy:Math.sin(a)*s-4,
+        gravity:.25,color:COLS[~~(Math.random()*COLS.length)],size:6+Math.random()*8,
+        rotation:Math.random()*360,rotSpeed:(Math.random()-.5)*8,alpha:1,
+        shape:Math.random()<.5?'rect':'circle'});
+    }
+    if(!raf) loop();
+  }
+  function loop(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    particles=particles.filter(p=>p.alpha>.02);
+    for(const p of particles){
+      p.x+=p.vx; p.y+=p.vy; p.vy+=p.gravity; p.vx*=.99;
+      p.rotation+=p.rotSpeed; p.alpha-=.012;
+      ctx.save(); ctx.globalAlpha=p.alpha; ctx.translate(p.x,p.y);
+      ctx.rotate(p.rotation*Math.PI/180); ctx.fillStyle=p.color;
+      if(p.shape==='rect') ctx.fillRect(-p.size/2,-p.size/4,p.size,p.size/2);
+      else{ ctx.beginPath(); ctx.arc(0,0,p.size/2,0,Math.PI*2); ctx.fill(); }
+      ctx.restore();
+    }
+    if(particles.length>0) raf=requestAnimationFrame(loop);
+    else{ raf=null; ctx.clearRect(0,0,canvas.width,canvas.height); }
+  }
+  return{init,burst};
+})();
+
+/* ===========================
+   STAR BURST
+   =========================== */
+function starBurst(el){
+  const r=el.getBoundingClientRect();
+  const cx=r.left+r.width/2, cy=r.top+r.height/2;
+  const ems=['⭐','✨','💫','🌟'];
+  for(let i=0;i<6;i++){
+    const s=document.createElement('span');
+    s.className='starburst';
+    s.textContent=ems[~~(Math.random()*ems.length)];
+    const angle=(i/6)*Math.PI*2, dist=60+Math.random()*40;
+    s.style.left=cx+'px'; s.style.top=cy+'px';
+    s.style.setProperty('--dx',Math.cos(angle)*dist+'px');
+    s.style.setProperty('--dy',Math.sin(angle)*dist+'px');
+    document.body.appendChild(s);
+    setTimeout(()=>s.remove(),900);
+  }
+}
+
+/* ===========================
+   APP CONTROLLER
+   =========================== */
+const App={
+  showScreen(name){
+    Speech.cancel();
+    document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+    const el=document.getElementById('screen-'+name);
+    if(el) el.classList.add('active');
+    if(name==='records')  this.renderRecords();
+    if(name==='settings') this.renderSettings();
+    if(name==='menu')     this.menuVoice();
+  },
+  menuVoice(){ setTimeout(()=>Speech.say('かんじだいすき！いっしょにかんじをおぼえよう！'),400); },
+
+  renderSettings(){
+    document.getElementById('soundToggle').checked=State.sound;
+    document.getElementById('diff-easy').classList.toggle('active',State.difficulty==='easy');
+    document.getElementById('diff-hard').classList.toggle('active',State.difficulty==='hard');
+  },
+  toggleSound(v){ State.sound=v; },
+  setDifficulty(d){
+    State.difficulty=d;
+    document.getElementById('diff-easy').classList.toggle('active',d==='easy');
+    document.getElementById('diff-hard').classList.toggle('active',d==='hard');
+  },
+  saveSettings(){ Store.save(); Speech.say('ほぞんしました！'); setTimeout(()=>this.showScreen('menu'),800); },
+
+  renderRecords(){
+    document.getElementById('recordNumber').textContent=State.bestStreak;
+    document.getElementById('totalCorrect').textContent=State.totalCorrect;
+    document.getElementById('totalGames').textContent=State.totalGames;
+    document.getElementById('learnedKanji').textContent=State.learnedKanji.size;
+    document.getElementById('trophyIcon').textContent=State.bestStreak>=10?'🏆':State.bestStreak>=5?'🥈':'🥉';
+    const wrap=document.getElementById('learnedKanjiDisplay');
+    wrap.innerHTML='';
+    [...State.learnedKanji].forEach(k=>{ const b=document.createElement('div'); b.className='learned-kanji-badge'; b.textContent=k; wrap.appendChild(b); });
+  },
+  confirmReset(){
+    if(confirm('きろくをけしますか？')){ State.bestStreak=State.totalCorrect=State.totalGames=0; State.learnedKanji=new Set(); Store.save(); this.renderRecords(); Speech.say('きろくをけしました'); }
+  },
+
+  startGame(){
+    // かんたん=前半40字, むずかしい=全80字
+    const half=Math.min(40,KANJI_DATA.length);
+    const set=State.difficulty==='hard'?KANJI_DATA.slice():KANJI_DATA.slice(0,half);
+    State.currentKanjiSet=set;
+    State.totalQuestions=10; State.score=State.combo=State.maxCombo=State.answered=0; State.results=[];
+    State.questionQueue=[...set].sort(()=>Math.random()-.5).slice(0,10);
+    this.showScreen('game');
+    this._updateProgress();
+    this._nextQuestion();
+  },
+
+  _nextQuestion(){
+    if(State.answered>=State.totalQuestions){ this._endGame(); return; }
+    State.currentQ=State.questionQueue[State.answered];
+    document.getElementById('kanjiDisplay').classList.remove('revealed');
+    document.getElementById('transformArrow').classList.remove('visible');
+    document.getElementById('kanjiChar').textContent=State.currentQ.kanji;
+    document.getElementById('speechText').textContent='このイラストはどんなかんじ？';
+    document.getElementById('comboDisplay').textContent='';
+    document.getElementById('illustrationWrap').innerHTML=State.currentQ.illust;
+
+    const correct=State.currentQ;
+    const wrong=State.currentKanjiSet.filter(k=>k.kanji!==correct.kanji).sort(()=>Math.random()-.5).slice(0,3);
+    const choices=[...wrong,correct].sort(()=>Math.random()-.5);
+
+    const grid=document.getElementById('choicesGrid');
+    grid.innerHTML='';
+    choices.forEach(k=>{ const btn=document.createElement('button'); btn.className='choice-btn'; btn.innerHTML=`<span class="choice-kanji">${k.kanji}</span>`; btn.onclick=()=>this._answer(btn,k.kanji===correct.kanji,k); grid.appendChild(btn); });
+    this._updateProgress();
+    setTimeout(()=>Speech.say(correct.questionSpeech),300);
+  },
+
+  _answer(btn,isCorrect,chosen){
+    document.querySelectorAll('.choice-btn').forEach(b=>b.onclick=null);
+    const correct=State.currentQ;
+    document.getElementById('transformArrow').classList.add('visible');
+    setTimeout(()=>document.getElementById('kanjiDisplay').classList.add('revealed'),200);
+
+    if(isCorrect){
+      btn.classList.add('correct');
+      State.score++; State.combo++;
+      if(State.combo>State.maxCombo) State.maxCombo=State.combo;
+      State.totalCorrect++;
+      State.learnedKanji.add(correct.kanji);
+      starBurst(btn);
+      document.getElementById('comboDisplay').textContent=State.combo>=3?`🔥 ${State.combo}れんぞく せいかい！`:'';
+      document.getElementById('speechText').textContent=`せいかい！「${correct.kanji}（${correct.reading}）」だよ！`;
+      Speech.say(correct.speech);
+      if(State.combo>=3) Confetti.burst(50);
+      this._nekoHappy();
+    } else {
+      btn.classList.add('wrong');
+      State.combo=0;
+      document.getElementById('comboDisplay').textContent='';
+      document.getElementById('speechText').textContent=`ざんねん！「${correct.kanji}（${correct.reading}）」だったよ！`;
+      Speech.say(`ざんねん！正解は「${correct.reading}」だよ。もう一度覚えようね！`);
+      document.querySelectorAll('.choice-btn').forEach(b=>{ if(b.querySelector('.choice-kanji').textContent===correct.kanji) b.classList.add('correct'); });
+      this._nekoSad();
+    }
+    State.results.push({kanji:correct.kanji,reading:correct.reading,correct:isCorrect});
+    State.answered++;
+    this._updateScoreChip();
+    this._updateProgress();
+    setTimeout(()=>this._nextQuestion(),1800);
+  },
+
+  _updateProgress(){ document.getElementById('progressBar').style.width=(State.answered/State.totalQuestions*100)+'%'; },
+  _updateScoreChip(){ document.getElementById('scoreChip').textContent=`⭐ ${State.score}`; },
+  _nekoHappy(){ const el=document.getElementById('nekoGame'); el.style.transform='scale(1.15) rotate(10deg)'; setTimeout(()=>el.style.transform='',400); },
+  _nekoSad(){   const el=document.getElementById('nekoGame'); el.style.transform='scale(0.9) rotate(-5deg)';  setTimeout(()=>el.style.transform='',400); },
+
+  _endGame(){
+    State.totalGames++;
+    if(State.maxCombo>State.bestStreak) State.bestStreak=State.maxCombo;
+    Store.save();
+    const pct=State.score/State.totalQuestions;
+    const title=pct===1?'💯 かんぺき！！！':pct>=.8?'✨ すごい！':pct>=.5?'👍 よくできました！':'😊 れんしゅうしよう！';
+    document.getElementById('resultTitle').textContent=title;
+    document.getElementById('resultScore').textContent=`${State.score} / ${State.totalQuestions}`;
+    document.getElementById('resultStreak').textContent=State.maxCombo>=3?`🔥 さいこうれんぞく：${State.maxCombo}もん！`:'';
+    const rev=document.getElementById('resultKanjiReview');
+    rev.innerHTML='';
+    State.results.forEach(r=>{ const b=document.createElement('div'); b.className=`review-badge ${r.correct?'ok':'bad'}`; b.innerHTML=`${r.correct?'✓':'✗'} ${r.kanji}`; rev.appendChild(b); });
+    this.showScreen('result');
+    if(pct>=.8){ Confetti.burst(100); setTimeout(()=>Speech.say(title+'おめでとう！'),300); }
+    else setTimeout(()=>Speech.say(title+'またれんしゅうしてね！'),300);
+  },
+
+  quitGame(){ if(confirm('ゲームをやめますか？')){ Speech.cancel(); this.showScreen('menu'); } },
+};
+
+/* ===========================
+   INIT
+   =========================== */
+document.addEventListener('DOMContentLoaded',()=>{
+  Confetti.init();
+  Store.load();
+  App.showScreen('menu');
+  if('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(()=>{});
+  console.log(`漢字データ: ${KANJI_DATA.length}字 →`, KANJI_DATA.map(k=>k.kanji).join(''));
+});

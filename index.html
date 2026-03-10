@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#FF6B9D">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>ようちえん まなびランド 🌈</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Kosugi+Maru&family=Noto+Sans+JP:wght@400;700;900&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<!-- ===== 背景デコレーション ===== -->
+<div class="bg-shapes" aria-hidden="true">
+  <div class="shape s1"></div>
+  <div class="shape s2"></div>
+  <div class="shape s3"></div>
+  <div class="shape s4"></div>
+  <div class="shape s5"></div>
+</div>
+
+<!-- ===== ヘッダー ===== -->
+<header class="hub-header">
+  <div class="title-badge">
+    <span class="title-emoji">🌈</span>
+    <span class="title-text">ようちえん まなびランド</span>
+    <span class="title-emoji">⭐</span>
+  </div>
+  <div class="stars-row">✨ たのしく まなぼう！ ✨</div>
+</header>
+
+<!-- ===== マスコットキャラクター ===== -->
+<div class="mascot-area">
+  <div class="mascot-neko" id="mascotNeko" aria-label="ねこせんせい">
+    <!-- ねこ先生SVG -->
+    <svg viewBox="0 0 200 220" xmlns="http://www.w3.org/2000/svg" width="140" height="154">
+      <ellipse cx="100" cy="165" rx="52" ry="45" fill="#FFD580"/>
+      <ellipse cx="100" cy="165" rx="48" ry="40" fill="#5B8DEF"/>
+      <polygon points="90,130 100,145 110,130 105,155 95,155" fill="#FF6B9D"/>
+      <circle cx="100" cy="105" r="52" fill="#FFD580"/>
+      <polygon points="55,70 48,40 78,62" fill="#FFD580"/>
+      <polygon points="60,68 55,48 76,63" fill="#FFB6C1"/>
+      <polygon points="145,70 152,40 122,62" fill="#FFD580"/>
+      <polygon points="140,68 145,48 124,63" fill="#FFB6C1"/>
+      <circle cx="82" cy="100" r="9" fill="white"/>
+      <circle cx="118" cy="100" r="9" fill="white"/>
+      <circle cx="84" cy="101" r="5" fill="#333"/>
+      <circle cx="120" cy="101" r="5" fill="#333"/>
+      <circle cx="86" cy="99" r="2" fill="white"/>
+      <circle cx="122" cy="99" r="2" fill="white"/>
+      <ellipse cx="100" cy="112" rx="5" ry="3.5" fill="#FF85A1"/>
+      <path d="M92,118 Q100,126 108,118" stroke="#FF85A1" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+      <line x1="60" y1="112" x2="90" y2="115" stroke="#999" stroke-width="1.5"/>
+      <line x1="58" y1="118" x2="88" y2="118" stroke="#999" stroke-width="1.5"/>
+      <line x1="110" y1="115" x2="140" y2="112" stroke="#999" stroke-width="1.5"/>
+      <line x1="112" y1="118" x2="142" y2="118" stroke="#999" stroke-width="1.5"/>
+      <circle cx="82" cy="100" r="12" fill="none" stroke="#8B6914" stroke-width="2.5"/>
+      <circle cx="118" cy="100" r="12" fill="none" stroke="#8B6914" stroke-width="2.5"/>
+      <line x1="94" y1="100" x2="106" y2="100" stroke="#8B6914" stroke-width="2.5"/>
+      <line x1="58" y1="96" x2="70" y2="99" stroke="#8B6914" stroke-width="2"/>
+      <line x1="130" y1="99" x2="142" y2="96" stroke="#8B6914" stroke-width="2"/>
+      <line x1="152" y1="145" x2="185" y2="90" stroke="#8B6914" stroke-width="4" stroke-linecap="round"/>
+      <circle cx="186" cy="88" r="5" fill="#FF6B9D"/>
+      <path d="M148,200 Q185,175 178,150" stroke="#FFD580" stroke-width="14" fill="none" stroke-linecap="round"/>
+      <path d="M148,200 Q185,175 178,150" stroke="#FFB88C" stroke-width="7" fill="none" stroke-linecap="round"/>
+    </svg>
+  </div>
+  <div class="speech-bubble" id="speechBubble">
+    <span id="speechText">どのおべんきょうを するかな？ 🎉</span>
+  </div>
+</div>
+
+<!-- ===== アプリカード一覧 ===== -->
+<main class="app-grid" id="appGrid">
+
+  <!-- カード1: 漢字 -->
+  <a href="apps/kanji/index.html" class="app-card app-card--kanji" aria-label="かんじだいすき">
+    <div class="card-icon">📖</div>
+    <div class="card-title">かんじ<br>だいすき！</div>
+    <div class="card-desc">しょうがっこう1ねんせいの かんじを おぼえよう</div>
+    <div class="card-badge">80じ</div>
+  </a>
+
+  <!-- カード2: 計算 -->
+  <a href="apps/math/index.html" class="app-card app-card--math" aria-label="さんすうおやつだいぼうけん">
+    <div class="card-icon">🍎</div>
+    <div class="card-title">さんすう<br>おやつ！</div>
+    <div class="card-desc">たしざん・ひきざんを おやつで れんしゅう</div>
+    <div class="card-badge">20まで</div>
+  </a>
+
+  <!-- カード3: 10の組み合わせ -->
+  <a href="apps/juucombo/index.html" class="app-card app-card--juucombo" aria-label="10のなかよし">
+    <div class="card-icon">🔢</div>
+    <div class="card-title">10の<br>なかよし！</div>
+    <div class="card-desc">10になる かずの くみあわせを おぼえよう</div>
+    <div class="card-badge">たして10</div>
+  </a>
+
+  <!-- 追加アプリ用プレースホルダー（将来の拡張） -->
+  <!-- 新しいアプリを追加するには、ここに <a class="app-card"> を追加するだけ！ -->
+
+</main>
+
+<!-- ===== フッター ===== -->
+<footer class="hub-footer">
+  <span>🌟 まいにち すこしずつ おぼえよう！ 🌟</span>
+</footer>
+
+<script src="hub.js"></script>
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('sw.js').catch(() => {});
+  }
+</script>
+</body>
+</html>
