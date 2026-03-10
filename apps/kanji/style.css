@@ -192,17 +192,16 @@ html, body {
 input:checked + .toggle-slider { background: var(--green); }
 input:checked + .toggle-slider::before { transform: translateX(28px); }
 
-.difficulty-options { display:flex; gap:14px; width:100%; }
-.diff-btn {
-  flex:1; padding:16px 10px; border:3px solid #eee; border-radius:16px;
+.count-options { display:flex; gap:12px; width:100%; }
+.count-btn {
+  flex:1; padding:14px 8px; border:3px solid #eee; border-radius:16px;
   background:white; cursor:pointer; font-family:inherit;
-  display:flex; flex-direction:column; align-items:center; gap:4px;
-  transition: all 0.2s; font-size:14px;
+  display:flex; flex-direction:column; align-items:center; gap:2px;
+  transition: all 0.2s;
 }
-.diff-btn.active { border-color: var(--pink); background:#FFF0F8; box-shadow:0 0 0 3px rgba(255,107,157,0.2); }
-.diff-emoji { font-size:22px; }
-.diff-name { font-weight:900; font-size:16px; color: var(--text); }
-.diff-desc { font-size:12px; color:#888; }
+.count-btn.active { border-color: var(--pink); background:#FFF0F8; box-shadow:0 0 0 3px rgba(255,107,157,0.2); }
+.count-num { font-weight:900; font-size:28px; color: var(--text); }
+.count-unit { font-size:13px; color:#888; font-weight:700; }
 
 .save-btn {
   background: linear-gradient(135deg, var(--green), var(--blue));
@@ -311,6 +310,14 @@ input:checked + .toggle-slider::before { transform: translateX(28px); }
   background:white; border-radius:24px; padding:16px;
   box-shadow: var(--shadow);
   min-height:130px;
+}
+.illust-block {
+  display:flex; flex-direction:column; align-items:center; gap:6px; flex-shrink:0;
+}
+.illust-reading {
+  font-size:14px; font-weight:900; color: var(--purple);
+  background:#F3E5F5; padding:3px 12px; border-radius:10px;
+  letter-spacing:1px; min-width:60px; text-align:center;
 }
 .illustration-wrap {
   width:100px; height:100px; display:flex; align-items:center; justify-content:center;

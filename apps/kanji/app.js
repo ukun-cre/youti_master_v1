@@ -666,10 +666,50 @@ const SUPPLEMENT = [
    APP STATE
    =========================== */
 const State={
-  sound:true, difficulty:'easy',
+  sound:true, questionCount:5,
+  deckPool:[], wrongQueue:[], deckMode:'normal',
   currentKanjiSet:[], questionQueue:[], currentQ:null,
-  score:0, combo:0, maxCombo:0, totalQuestions:10, answered:0, results:[],
+  score:0, combo:0, maxCombo:0, totalQuestions:5, answered:0, results:[],
   learnedKanji:new Set(), bestStreak:0, totalCorrect:0, totalGames:0,
+};
+
+/* ===========================
+   DECK MANAGER
+   =========================== */
+const DeckManager={
+  init(){
+    try{
+      const d=JSON.parse(localStorage.getItem('kanjiDeck')||'null');
+      if(d && Array.isArray(d.pool)){
+        State.deckPool=[...d.pool]; State.wrongQueue=[...d.wrongQueue]; State.deckMode=d.mode||'normal'; return;
+      }
+    }catch(e){}
+    this._reset();
+  },
+  _reset(){
+    const idx=KANJI_DATA.map((_,i)=>i);
+    for(let i=idx.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[idx[i],idx[j]]=[idx[j],idx[i]];}
+    State.deckPool=[...idx]; State.wrongQueue=[]; State.deckMode='normal'; this._save();
+  },
+  _save(){
+    try{localStorage.setItem('kanjiDeck',JSON.stringify({pool:State.deckPool,wrongQueue:State.wrongQueue,mode:State.deckMode}));}catch(e){}
+  },
+  nextBatch(n){
+    if(State.deckPool.length===0){
+      if(State.deckMode==='normal'&&State.wrongQueue.length>0){
+        State.deckMode='review'; State.deckPool=[...State.wrongQueue]; State.wrongQueue=[]; this._save();
+      } else { this._reset(); }
+    }
+    const batch=State.deckPool.splice(0,Math.min(n,State.deckPool.length));
+    this._save();
+    return batch.map(i=>KANJI_DATA[i]);
+  },
+  markWrong(kanji){
+    if(State.deckMode!=='review'){
+      const idx=KANJI_DATA.findIndex(k=>k.kanji===kanji);
+      if(idx>=0&&!State.wrongQueue.includes(idx)){State.wrongQueue.push(idx); this._save();}
+    }
+  },
 };
 
 /* ===========================
@@ -678,7 +718,7 @@ const State={
 const Store={
   save(){
     try{ localStorage.setItem('kanjiApp',JSON.stringify({
-      sound:State.sound, difficulty:State.difficulty, bestStreak:State.bestStreak,
+      sound:State.sound, questionCount:State.questionCount, bestStreak:State.bestStreak,
       totalCorrect:State.totalCorrect, totalGames:State.totalGames,
       learnedKanji:[...State.learnedKanji],
     }));}catch(e){}
@@ -687,7 +727,7 @@ const Store={
     try{
       const d=JSON.parse(localStorage.getItem('kanjiApp')||'{}');
       if(d.sound!==undefined) State.sound=d.sound;
-      if(d.difficulty)        State.difficulty=d.difficulty;
+      if(d.questionCount)     State.questionCount=d.questionCount;
       if(d.bestStreak)        State.bestStreak=d.bestStreak;
       if(d.totalCorrect)      State.totalCorrect=d.totalCorrect;
       if(d.totalGames)        State.totalGames=d.totalGames;
@@ -782,14 +822,12 @@ const App={
 
   renderSettings(){
     document.getElementById('soundToggle').checked=State.sound;
-    document.getElementById('diff-easy').classList.toggle('active',State.difficulty==='easy');
-    document.getElementById('diff-hard').classList.toggle('active',State.difficulty==='hard');
+    [5,7,10].forEach(n=>document.getElementById(`count-${n}`).classList.toggle('active',State.questionCount===n));
   },
   toggleSound(v){ State.sound=v; },
-  setDifficulty(d){
-    State.difficulty=d;
-    document.getElementById('diff-easy').classList.toggle('active',d==='easy');
-    document.getElementById('diff-hard').classList.toggle('active',d==='hard');
+  setQuestionCount(n){
+    State.questionCount=n;
+    [5,7,10].forEach(c=>document.getElementById(`count-${c}`).classList.toggle('active',State.questionCount===c));
   },
   saveSettings(){ Store.save(); Speech.say('ほぞんしました！'); setTimeout(()=>this.showScreen('menu'),800); },
 
@@ -808,12 +846,13 @@ const App={
   },
 
   startGame(){
-    // かんたん=前半40字, むずかしい=全80字
-    const half=Math.min(40,KANJI_DATA.length);
-    const set=State.difficulty==='hard'?KANJI_DATA.slice():KANJI_DATA.slice(0,half);
-    State.currentKanjiSet=set;
-    State.totalQuestions=10; State.score=State.combo=State.maxCombo=State.answered=0; State.results=[];
-    State.questionQueue=[...set].sort(()=>Math.random()-.5).slice(0,10);
+    const batch=DeckManager.nextBatch(State.questionCount);
+    State.currentKanjiSet=KANJI_DATA;
+    State.totalQuestions=batch.length;
+    State.score=State.combo=State.maxCombo=State.answered=0; State.results=[];
+    State.questionQueue=batch;
+    // モード表示（リビューモードの場合はメッセージ）
+    if(State.deckMode==='review') setTimeout(()=>Speech.say('まちがえた漢字をれんしゅうしよう！'),300);
     this.showScreen('game');
     this._updateProgress();
     this._nextQuestion();
@@ -825,6 +864,7 @@ const App={
     document.getElementById('kanjiDisplay').classList.remove('revealed');
     document.getElementById('transformArrow').classList.remove('visible');
     document.getElementById('kanjiChar').textContent=State.currentQ.kanji;
+    document.getElementById('illustReading').textContent=State.currentQ.reading;
     document.getElementById('speechText').textContent='このイラストはどんなかんじ？';
     document.getElementById('comboDisplay').textContent='';
     document.getElementById('illustrationWrap').innerHTML=State.currentQ.illust;
@@ -861,6 +901,7 @@ const App={
     } else {
       btn.classList.add('wrong');
       State.combo=0;
+      DeckManager.markWrong(correct.kanji);
       document.getElementById('comboDisplay').textContent='';
       document.getElementById('speechText').textContent=`ざんねん！「${correct.kanji}（${correct.reading}）」だったよ！`;
       Speech.say(`ざんねん！正解は「${correct.reading}」だよ。もう一度覚えようね！`);
@@ -905,6 +946,7 @@ const App={
 document.addEventListener('DOMContentLoaded',()=>{
   Confetti.init();
   Store.load();
+  DeckManager.init();
   App.showScreen('menu');
   if('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(()=>{});
   console.log(`漢字データ: ${KANJI_DATA.length}字 →`, KANJI_DATA.map(k=>k.kanji).join(''));
