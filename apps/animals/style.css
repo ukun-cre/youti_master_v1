@@ -452,28 +452,35 @@ html, body {
   position: relative; overflow: hidden;
 }
 
-/* 虹 */
+/* 虹 - 全幅・大きく・左から伸びるアニメーション */
 .result-rainbow {
-  position: fixed; top: 0; left: -5%; width: 110%;
+  position: fixed; top: 0; left: 0; right: 0;
+  height: 52vw; /* スマホで約195px 相当 */
   z-index: 5; pointer-events: none;
-  display: flex; flex-direction: column; align-items: center;
+  display: flex; flex-direction: column; align-items: stretch;
+  overflow: hidden;
+  border-radius: 0 0 50% 50%; /* 下辺をアーチ形に */
+  filter: drop-shadow(0 8px 24px rgba(0,0,0,0.18));
 }
 .rainbow-stripe {
-  width: 90%; border-radius: 50% 50% 0 0;
-  animation: rainbowExpand 0.8s ease forwards;
+  flex: 1;
+  transform: scaleX(0);
+  transform-origin: left center;
   opacity: 0;
+  animation: rainbowExtend 0.85s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
-.r1 { height: 48px; background: rgba(255,0,0,0.3);     animation-delay: 0.0s; }
-.r2 { height: 44px; background: rgba(255,127,0,0.3);   animation-delay: 0.08s; }
-.r3 { height: 40px; background: rgba(255,215,0,0.35);  animation-delay: 0.16s; }
-.r4 { height: 36px; background: rgba(0,200,80,0.3);    animation-delay: 0.24s; }
-.r5 { height: 32px; background: rgba(0,150,255,0.3);   animation-delay: 0.32s; }
-.r6 { height: 28px; background: rgba(100,0,255,0.3);   animation-delay: 0.40s; }
-.r7 { height: 24px; background: rgba(220,0,255,0.25);  animation-delay: 0.48s; }
+.r1 { background: rgba(255,40,40,0.70);  animation-delay: 0.00s; }
+.r2 { background: rgba(255,150,0,0.70);  animation-delay: 0.06s; }
+.r3 { background: rgba(255,225,0,0.75);  animation-delay: 0.12s; }
+.r4 { background: rgba(30,210,90,0.70);  animation-delay: 0.18s; }
+.r5 { background: rgba(0,160,255,0.70);  animation-delay: 0.24s; }
+.r6 { background: rgba(110,0,255,0.65);  animation-delay: 0.30s; }
+.r7 { background: rgba(220,0,200,0.60);  animation-delay: 0.36s; }
 
-@keyframes rainbowExpand {
-  from { transform: scaleX(0); opacity: 0; }
-  to   { transform: scaleX(1); opacity: 1; }
+@keyframes rainbowExtend {
+  0%   { transform: scaleX(0); opacity: 0; }
+  8%   { opacity: 1; }
+  100% { transform: scaleX(1); opacity: 1; }
 }
 
 /* 拍手エモジ */

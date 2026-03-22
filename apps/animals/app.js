@@ -375,7 +375,7 @@ function checkAnswer(selected, btnEl) {
   if (isOK) {
     State.score++;
     if (btnEl) btnEl.classList.add('correct');
-    Fireworks.fire(4, false);
+    Fireworks.fire(6, false);
   } else {
     if (btnEl) btnEl.classList.add('wrong');
     document.querySelectorAll('.choice-btn').forEach(b => {
@@ -474,12 +474,13 @@ function showFinalResult() {
     celebratePerfect();
     speak('すばらしい！ぜんもんせいかいです！おめでとう！');
   } else if (pct >= 0.8) {
-    Fireworks.fire(6, true);
+    Fireworks.fire(8, true);
     speak('すごい！よくできました！おめでとう！');
   } else if (pct >= 0.5) {
-    Fireworks.fire(2, false);
+    Fireworks.fire(4, false);
     speak('よくできました！またれんしゅうしてね！');
   } else {
+    Fireworks.fire(2, false);   // 低スコアでも少し花火
     speak('またれんしゅうしてね！');
   }
 }
