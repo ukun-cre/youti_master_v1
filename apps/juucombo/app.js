@@ -39,6 +39,8 @@ function speak(text) {
   window.speechSynthesis.cancel();
   const u = new SpeechSynthesisUtterance(text);
   u.lang = 'ja-JP'; u.rate = 0.85; u.pitch = 1.2;
+  const v = typeof SpeechUtil !== 'undefined' ? SpeechUtil.getVoice() : null;
+  if (v) u.voice = v;
   window.speechSynthesis.speak(u);
 }
 

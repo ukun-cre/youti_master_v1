@@ -24,6 +24,8 @@ document.addEventListener('DOMContentLoaded', () => {
       window.speechSynthesis.cancel();
       const u = new SpeechSynthesisUtterance('ようちえん まなびランドへ ようこそ！ どのおべんきょうを する かな？');
       u.lang = 'ja-JP'; u.rate = 0.85; u.pitch = 1.2;
+      const v = typeof SpeechUtil !== 'undefined' ? SpeechUtil.getVoice() : null;
+      if (v) u.voice = v;
       window.speechSynthesis.speak(u);
     }, 600);
   }

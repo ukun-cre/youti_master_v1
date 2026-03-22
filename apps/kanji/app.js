@@ -744,6 +744,8 @@ const Speech={
     window.speechSynthesis.cancel();
     const u=new SpeechSynthesisUtterance(t);
     u.lang='ja-JP'; u.rate=0.85; u.pitch=1.2;
+    const v=typeof SpeechUtil!=='undefined'?SpeechUtil.getVoice():null;
+    if(v) u.voice=v;
     window.speechSynthesis.speak(u); },
   cancel(){ if(window.speechSynthesis) window.speechSynthesis.cancel(); }
 };

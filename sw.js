@@ -3,7 +3,7 @@
    統合Service Worker（全サブアプリをキャッシュ）
    ========================================== */
 
-const CACHE_NAME = 'manabiland-v2';
+const CACHE_NAME = 'manabiland-v3';
 
 // キャッシュするアセット一覧
 const ASSETS = [
@@ -11,6 +11,7 @@ const ASSETS = [
   './index.html',
   './style.css',
   './hub.js',
+  './common/speech.js',
   './manifest.json',
   // 漢字アプリ
   './apps/kanji/index.html',
