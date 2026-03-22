@@ -3,7 +3,7 @@
    統合Service Worker（全サブアプリをキャッシュ）
    ========================================== */
 
-const CACHE_NAME = 'manabiland-v3';
+const CACHE_NAME = 'manabiland-v4';
 
 // キャッシュするアセット一覧
 const ASSETS = [
@@ -29,6 +29,10 @@ const ASSETS = [
   './apps/no5/index.html',
   './apps/no5/style.css',
   './apps/no5/app.js',
+  // とけいをよもうアプリ
+  './apps/clock/index.html',
+  './apps/clock/style.css',
+  './apps/clock/app.js',
   // Googleフォント（キャッシュ試行）
   'https://fonts.googleapis.com/css2?family=Kosugi+Maru&family=Noto+Sans+JP:wght@400;700;900&display=swap',
 ];
