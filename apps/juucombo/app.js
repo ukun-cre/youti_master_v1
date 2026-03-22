@@ -116,23 +116,6 @@ function nextQuestion() {
   const answer   = q.askRight ? q.pair.b : q.pair.a;
 
   // 方程式表示
-  const eqLeft = document.getElementById('eqLeft');
-  const eqBlank = document.querySelector('.eq-blank');
-  if (q.askRight) {
-    // knownNum + □ = 10
-    eqLeft.textContent = knownNum;
-    eqLeft.style.order = '1';
-    document.querySelector('.eq-op').style.order = '2';
-    eqBlank.style.order = '3';
-  } else {
-    // □ + knownNum = 10 (左側を問う)
-    eqLeft.textContent = knownNum;
-    eqLeft.style.order = '3';
-    document.querySelector('.eq-op').style.order = '2';
-    eqBlank.style.order = '1';
-  }
-
-  // 実際の表示を構築（シンプルに常に left+□=10 or □+right=10）
   const eqDisplay = document.getElementById('equationDisplay');
   if (q.askRight) {
     eqDisplay.innerHTML = `
