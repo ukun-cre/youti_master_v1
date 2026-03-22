@@ -215,7 +215,7 @@ const app = {
     } else {
       single.classList.remove('hidden');
       dual.classList.add('hidden');
-      const dispH = (q.h || q.fromH || 0) % 12;
+      const dispH = (q.h !== undefined ? q.h : (q.fromH !== undefined ? q.fromH : 0)) % 12;
       const dispM = q.m !== undefined ? q.m : 0;
       this._setClock('hour-hand', 'minute-hand', dispH, dispM);
     }
@@ -446,9 +446,35 @@ const app = {
     if (state.answered) return;
     const f = state.inputField;
     if (f === 'hour')  { state.inputHour  = state.inputHour.slice(0,-1);  }
-    if (f === 'min')   { state.inputMin   = state.inputMin.slice(0,-1);   }
+    if (f === 'min') {
+      if (state.inputMin === '') {
+        // 「分」が空なら「時」フィールドに戻る
+        state.inputField = 'hour';
+      } else {
+        state.inputMin = state.inputMin.slice(0,-1);
+      }
+    }
     if (f === 'dhour') { state.inputDHour = state.inputDHour.slice(0,-1); }
-    if (f === 'dmin')  { state.inputDMin  = state.inputDMin.slice(0,-1);  }
+    if (f === 'dmin') {
+      if (state.inputDMin === '') {
+        // 「分」が空なら「時間」フィールドに戻る
+        state.inputField = 'dhour';
+      } else {
+        state.inputDMin = state.inputDMin.slice(0,-1);
+      }
+    }
+    this._updateInputDisplay();
+  },
+
+  // 入力フィールドを直接選択する（タップでクリアして再入力）
+  setInputField(field) {
+    if (state.answered) return;
+    state.inputField = field;
+    // タップ時にそのフィールドをクリアして再入力できるようにする
+    if (field === 'hour')  state.inputHour  = '';
+    else if (field === 'min')   state.inputMin   = '';
+    else if (field === 'dhour') state.inputDHour = '';
+    else if (field === 'dmin')  state.inputDMin  = '';
     this._updateInputDisplay();
   },
 
@@ -457,24 +483,28 @@ const app = {
     const q = state.questions[state.questionIndex];
     const f = state.inputField;
 
-    // フィールド切替
-    if (f === 'hour' && state.inputHour !== '') {
+    // フィールド切替（未入力なら切り替えず待機）
+    if (f === 'hour') {
+      if (state.inputHour === '') return;
       state.inputField = 'min';
       this._updateInputDisplay();
       return;
     }
-    if (f === 'dhour' && state.inputDHour !== '') {
+    if (f === 'dhour') {
+      if (state.inputDHour === '') return;
       state.inputField = 'dmin';
       this._updateInputDisplay();
       return;
     }
 
-    // 答え合わせ
+    // 答え合わせ（「時」が未入力なら送信しない）
     let value;
     if (q.type === 'duration') {
-      value = { h: parseInt(state.inputDHour||'0'), m: parseInt(state.inputDMin||'0') };
+      if (state.inputDHour === '') return;
+      value = { h: parseInt(state.inputDHour), m: parseInt(state.inputDMin||'0') };
     } else {
-      value = { h: parseInt(state.inputHour||'0'), m: parseInt(state.inputMin||'0') };
+      if (state.inputHour === '') return;
+      value = { h: parseInt(state.inputHour), m: parseInt(state.inputMin||'0') };
     }
     const correct = this._getAnswer(q);
     state.answered = true;
