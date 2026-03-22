@@ -1,6 +1,6 @@
 const app = {
-    settings: { sound: true, level: 1, count: 5 },
-    state: { currentQuestion: 0, score: 0, combo: 0, maxCombo: 0, correctAnswer: 0, roundCorrect: 0, roundResults: [] },
+    settings: { sound: false, level: 1, count: 5 },
+    state: { currentQuestion: 0, score: 0, combo: 0, maxCombo: 0, correctAnswer: 0, currentEquation: '', roundCorrect: 0, roundResults: [] },
     
     // SVG素材（キャラクターとおやつ）
     svg: {
@@ -146,6 +146,7 @@ const app = {
         this.state.correctAnswer = ans;
         const operatorStr = isAddition ? "+" : "-";
         const eqText = `${num1} ${operatorStr} ${num2}`;
+        this.state.currentEquation = eqText;
         document.getElementById('equation-text').textContent = `${eqText} = ?`;
         
         // 音声読み上げ用フォーマット
@@ -181,7 +182,7 @@ const app = {
         document.querySelectorAll('.btn-choice').forEach(b => b.disabled = true);
         const charEl = document.getElementById('game-char');
         const isCorrect = selected === this.state.correctAnswer;
-        this.state.roundResults.push(isCorrect);
+        this.state.roundResults.push({ correct: isCorrect, equation: this.state.currentEquation, answer: this.state.correctAnswer });
         if (isCorrect) {
             this.playSound('correct');
             this.speak("せいかい！すごいね！");
@@ -223,9 +224,14 @@ const app = {
             ? `<div class="character" style="width:120px;height:120px;">${this.svg.dog}</div>`
             : `<div class="character" style="width:120px;height:120px;">${this.svg.cat}</div>`;
 
-        // 結果バッジ
+        // 結果バッジ（式と答えを表示）
         const badges = document.getElementById('result-badges');
-        badges.innerHTML = this.state.roundResults.map(r => `<span class="result-badge ${r ? 'badge-ok' : 'badge-ng'}">${r ? '✓' : '✗'}</span>`).join('');
+        badges.innerHTML = this.state.roundResults.map(r =>
+            `<span class="result-badge ${r.correct ? 'badge-ok' : 'badge-ng'}">
+                <span class="badge-mark">${r.correct ? '○' : '✗'}</span>
+                <span class="badge-eq">${r.equation} = ${r.answer}</span>
+            </span>`
+        ).join('');
 
         this.speak(title + (pct >= 0.8 ? 'おめでとう！' : 'またれんしゅうしてね！'));
         if (pct >= 0.8) this.fireResultConfetti();

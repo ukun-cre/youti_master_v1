@@ -666,7 +666,7 @@ const SUPPLEMENT = [
    APP STATE
    =========================== */
 const State={
-  sound:true, questionCount:5,
+  sound:false, questionCount:5,
   deckPool:[], wrongQueue:[], deckMode:'normal',
   currentKanjiSet:[], questionQueue:[], currentQ:null,
   score:0, combo:0, maxCombo:0, totalQuestions:5, answered:0, results:[],
@@ -862,9 +862,12 @@ const App={
   _nextQuestion(){
     if(State.answered>=State.totalQuestions){ this._endGame(); return; }
     State.currentQ=State.questionQueue[State.answered];
-    document.getElementById('kanjiDisplay').classList.remove('revealed');
-    document.getElementById('transformArrow').classList.remove('visible');
+    const dispEl=document.getElementById('kanjiDisplay');
+    dispEl.style.transition='none';
+    dispEl.classList.remove('revealed');
     document.getElementById('kanjiChar').textContent=State.currentQ.kanji;
+    requestAnimationFrame(()=>{ dispEl.style.transition=''; });
+    document.getElementById('transformArrow').classList.remove('visible');
     document.getElementById('illustReading').textContent=State.currentQ.reading;
     document.getElementById('speechText').textContent='このイラストはどんなかんじ？';
     document.getElementById('comboDisplay').textContent='';
@@ -948,7 +951,7 @@ const App={
     else setTimeout(()=>Speech.say(title+'またれんしゅうしてね！'),300);
   },
 
-  quitGame(){ if(confirm('ゲームをやめますか？')){ Speech.cancel(); this.showScreen('menu'); } },
+  quitGame(){ Speech.cancel(); this.showScreen('menu'); },
 };
 
 /* ===========================

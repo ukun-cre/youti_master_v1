@@ -218,10 +218,8 @@ function updateProgress() {
 }
 
 function quitGame() {
-  if (confirm('ゲームをやめますか？')) {
-    window.speechSynthesis && window.speechSynthesis.cancel();
-    showScreen('menu');
-  }
+  window.speechSynthesis && window.speechSynthesis.cancel();
+  showScreen('menu');
 }
 
 function endGame() {
