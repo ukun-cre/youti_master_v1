@@ -311,6 +311,8 @@ h2 { color: var(--sky); font-size: 1.8rem; margin-bottom: 16px; }
 #view-result {
     background: linear-gradient(160deg, #EEF6FF, #FFF5E0);
     gap: 12px; overflow-y: auto;
+    justify-content: flex-start;
+    padding-top: 20px;
 }
 .result-title-text {
     font-size: 2rem; font-weight: 900;
@@ -337,6 +339,25 @@ h2 { color: var(--sky); font-size: 1.8rem; margin-bottom: 16px; }
 .result-badge { font-size: 1.2rem; font-weight: 900; padding: 4px 12px; border-radius: 10px; }
 .badge-ok { background: #E8FFF4; border: 2px solid #4ECDC4; color: #27AE60; }
 .badge-ng { background: #FFF0F0; border: 2px solid #FF6B6B; color: #FF4757; }
+
+/* ===== 次へボタン（常に画面下部に表示） ===== */
+#btn-next {
+    position: sticky;
+    bottom: 16px;
+    z-index: 10;
+    margin-top: 8px;
+}
+
+/* ===== 時入力ボックス（タップで選択可能） ===== */
+.time-input-val {
+    cursor: pointer;
+}
+
+/* ===== ゲームビュー（コンテンツ上から配置） ===== */
+#view-game {
+    justify-content: flex-start;
+    padding-top: 16px;
+}
 
 /* ===== スクロールバー ===== */
 ::-webkit-scrollbar { width: 5px; }
