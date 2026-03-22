@@ -261,59 +261,56 @@ function renderAnimalDisplay(q) {
 function makeAnimalGroup(animal, count) {
   const div = document.createElement('div');
   div.className = 'animal-group';
-  div.style.setProperty('--ac', animal.color);
-  div.style.setProperty('--ab', animal.bg);
-
-  const lbl = document.createElement('div');
-  lbl.className = 'ag-label';
-  lbl.textContent = animal.name;
 
   const grid = document.createElement('div');
-  grid.className = 'ag-emoji-grid' + (count > 10 ? ' small' : count > 5 ? ' medium' : '');
+  grid.className = 'ag-icon-grid';
 
+  const small = count > 10;
   for (let i = 0; i < count; i++) {
-    const s = document.createElement('span');
-    s.className = 'ag-emoji';
-    s.innerHTML = animal.svg;  // SVGイラストを使用
-    grid.appendChild(s);
+    const icon = document.createElement('div');
+    icon.className = 'ag-icon' + (small ? ' small' : '');
+    icon.style.animationDelay = (i * 0.1) + 's';
+    icon.innerHTML = animal.svg;
+    grid.appendChild(icon);
   }
 
-  const cnt = document.createElement('div');
-  cnt.className = 'ag-count';
-  cnt.textContent = count + 'ひき';
+  const label = document.createElement('div');
+  label.className = 'ag-name-label';
+  label.style.color = animal.color;
+  label.textContent = `${animal.name} ${count}ひき`;
 
-  div.appendChild(lbl);
   div.appendChild(grid);
-  div.appendChild(cnt);
+  div.appendChild(label);
   return div;
 }
 
 function makeSubGroup(animal, total, leaving) {
   const div = document.createElement('div');
   div.className = 'animal-group';
-  div.style.setProperty('--ac', animal.color);
-  div.style.setProperty('--ab', animal.bg);
 
-  const lbl = document.createElement('div');
-  lbl.className = 'ag-label';
-  lbl.textContent = `${animal.name} ${total}ひき`;
+  const label = document.createElement('div');
+  label.className = 'ag-name-label';
+  label.style.color = animal.color;
+  label.textContent = `${animal.name} ${total}ひき`;
 
   const grid = document.createElement('div');
-  grid.className = 'ag-emoji-grid' + (total > 10 ? ' small' : total > 5 ? ' medium' : '');
+  grid.className = 'ag-icon-grid';
 
+  const small = total > 10;
   const staying = total - leaving;
   for (let i = 0; i < total; i++) {
-    const s = document.createElement('span');
-    s.className = 'ag-emoji' + (i >= staying ? ' leaving' : '');
-    s.innerHTML = animal.svg;  // SVGイラストを使用
-    grid.appendChild(s);
+    const icon = document.createElement('div');
+    icon.className = 'ag-icon' + (small ? ' small' : '') + (i >= staying ? ' leaving' : '');
+    icon.style.animationDelay = (i * 0.1) + 's';
+    icon.innerHTML = animal.svg;
+    grid.appendChild(icon);
   }
 
   const note = document.createElement('div');
   note.className = 'ag-leaving-note';
-  note.textContent = `${animal.name} ${leaving}ひき かえった 👋`;
+  note.textContent = `${leaving}ひき かえった 👋`;
 
-  div.appendChild(lbl);
+  div.appendChild(label);
   div.appendChild(grid);
   div.appendChild(note);
   return div;
