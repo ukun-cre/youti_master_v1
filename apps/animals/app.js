@@ -118,7 +118,13 @@ const State = {
   numpadVal:  '',
   results:    [],      // [{ correct, formula }]
   answered:   false,
+  mute:       false,   // 音声ミュート
+  streak:     0,       // 連続正解数
 };
+
+// ===== 正解/不正解メッセージ =====
+const CORRECT_MSGS = ['せいかい！', 'やったね！', 'すごい！', 'かんぺき！', 'ナイス！', 'さすが！', 'よくできた！'];
+const WRONG_MSGS   = ['おしい！もうすこし！', 'つぎはできる！', 'もういちどかんがえよう！'];
 
 // ===== スクリーン切替 =====
 function showScreen(name) {
@@ -137,6 +143,7 @@ function selectOpt(key, value, btn) {
 
 // ===== 音声 =====
 function speak(text) {
+  if (State.mute) return;
   if (!('speechSynthesis' in window)) return;
   window.speechSynthesis.cancel();
   const u = new SpeechSynthesisUtterance(text);
@@ -146,40 +153,130 @@ function speak(text) {
   window.speechSynthesis.speak(u);
 }
 
+// ===== 音声ミュートトグル =====
+function toggleMute(btn) {
+  State.mute = !State.mute;
+  btn.textContent = State.mute ? '🔇 おんせい なし' : '🔊 おんせい あり';
+  btn.classList.toggle('active', !State.mute);
+}
+
 // ===== 問題生成 =====
 function pickAnimal(exclude) {
   const pool = exclude ? ANIMALS.filter(a => a !== exclude) : ANIMALS;
   return pool[Math.floor(Math.random() * pool.length)];
 }
 
+function rand(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+
 function makeQuestion() {
   const max = State.level;
 
   if (State.mode === 'add') {
-    const answer = Math.floor(Math.random() * (max - 1)) + 2;  // 2..max
+    const answer = Math.floor(Math.random() * (max - 1)) + 2;
     const a      = Math.floor(Math.random() * (answer - 1)) + 1;
     const b      = answer - a;
     const a1     = pickAnimal(null);
     const a2     = pickAnimal(a1);
+
+    // 足し算バリエーション
+    const tmpl = rand([
+      {
+        questionText: `${a1.name}が ${a}ひき、${a2.name}が ${b}ひきいます。\nあわせて なんひきですか？`,
+        speechText:   `${a1.name}が${a}ひき、${a2.name}が${b}ひき。あわせてなんひきですか？`,
+      },
+      {
+        questionText: `${a1.name}が ${a}ひきいます。\nそこへ ${a2.name}が ${b}ひき やってきました。\nぜんぶで なんひきですか？`,
+        speechText:   `${a1.name}が${a}ひき。${a2.name}が${b}ひきやってきました。ぜんぶでなんひきですか？`,
+      },
+      {
+        questionText: `${a1.name}のどうぶつえんに ${a}ひき、\n${a2.name}のどうぶつえんに ${b}ひきいます。\nあわせて なんひきですか？`,
+        speechText:   `${a1.name}のどうぶつえんに${a}ひき、${a2.name}のどうぶつえんに${b}ひき。あわせてなんひきですか？`,
+      },
+      {
+        questionText: `${a1.name}が ${a}ひきと ${a2.name}が ${b}ひきが\nなかよく あそんでいます。\nみんなで なんひきですか？`,
+        speechText:   `${a1.name}が${a}ひきと${a2.name}が${b}ひき、なかよくあそんでいます。みんなでなんひきですか？`,
+      },
+      {
+        questionText: `はこの なかに ${a1.name}が ${a}ひき、\nそとに ${a2.name}が ${b}ひきいます。\nぜんいんで なんひきですか？`,
+        speechText:   `はこのなかに${a1.name}が${a}ひき、そとに${a2.name}が${b}ひき。ぜんいんでなんひきですか？`,
+      },
+    ]);
+
     return {
       type: 'add', a, b, answer, animal1: a1, animal2: a2,
       formula:       `${a1.name} ${a} ＋ ${a2.name} ${b} ＝ ${answer}`,
       formulaSpeech: `${a}たす${b}は${answer}`,
-      questionText:  `${a1.name}が ${a}ひき、${a2.name}が ${b}ひきいます。\nあわせて なんひきですか？`,
-      speechText:    `${a1.name}が${a}ひき、${a2.name}が${b}ひき。あわせて なんひきですか？`,
+      questionText:  tmpl.questionText,
+      speechText:    tmpl.speechText,
     };
+
   } else {
-    const total   = Math.floor(Math.random() * (max - 1)) + 2;  // 2..max
-    const removed = Math.floor(Math.random() * (total - 1)) + 1;
-    const answer  = total - removed;
-    const a1      = pickAnimal(null);
-    return {
-      type: 'sub', a: total, b: removed, answer, animal1: a1,
-      formula:       `${a1.name} ${total} ー ${removed} ＝ ${answer}`,
-      formulaSpeech: `${total}ひく${removed}は${answer}`,
-      questionText:  `${a1.name}が ${total}ひきいます。\n${removed}ひきかえりました。のこりは なんひきですか？`,
-      speechText:    `${a1.name}が${total}ひき。${removed}ひきかえりました。のこりはなんひきですか？`,
-    };
+    // 引き算：「帰った」系か「ちがい」系か選ぶ
+    const useDiff = Math.random() < 0.4; // 40%の確率でちがい問題
+
+    if (useDiff) {
+      // ちがい系：A匹とB匹、どちらが何匹おおい？
+      const aCount = Math.floor(Math.random() * (max - 1)) + 2;
+      const bCount = Math.floor(Math.random() * (aCount - 1)) + 1;
+      const answer = aCount - bCount;
+      const a1     = pickAnimal(null);
+      const a2     = pickAnimal(a1);
+      const tmpl   = rand([
+        {
+          questionText: `${a1.name}が ${aCount}ひき、${a2.name}が ${bCount}ひきいます。\n${a1.name}は ${a2.name}より なんひきおおいですか？`,
+          speechText:   `${a1.name}が${aCount}ひき、${a2.name}が${bCount}ひき。${a1.name}は${a2.name}よりなんひきおおいですか？`,
+        },
+        {
+          questionText: `${a1.name}が ${aCount}ひき、${a2.name}が ${bCount}ひきいます。\nちがいは なんひきですか？`,
+          speechText:   `${a1.name}が${aCount}ひき、${a2.name}が${bCount}ひき。ちがいはなんひきですか？`,
+        },
+        {
+          questionText: `${a1.name}が ${aCount}ひき、${a2.name}が ${bCount}ひきいます。\n${a2.name}は ${a1.name}より なんひきすくないですか？`,
+          speechText:   `${a1.name}が${aCount}ひき、${a2.name}が${bCount}ひき。${a2.name}は${a1.name}よりなんひきすくないですか？`,
+        },
+      ]);
+      return {
+        type: 'sub', subType: 'difference',
+        a: aCount, b: bCount, answer, animal1: a1, animal2: a2,
+        formula:       `${a1.name} ${aCount} ー ${a2.name} ${bCount} ＝ ${answer}`,
+        formulaSpeech: `${aCount}ひく${bCount}は${answer}`,
+        questionText:  tmpl.questionText,
+        speechText:    tmpl.speechText,
+      };
+
+    } else {
+      // 帰った系
+      const total   = Math.floor(Math.random() * (max - 1)) + 2;
+      const removed = Math.floor(Math.random() * (total - 1)) + 1;
+      const answer  = total - removed;
+      const a1      = pickAnimal(null);
+      const tmpl    = rand([
+        {
+          questionText: `${a1.name}が ${total}ひきいます。\n${removed}ひきかえりました。\nのこりは なんひきですか？`,
+          speechText:   `${a1.name}が${total}ひき。${removed}ひきかえりました。のこりはなんひきですか？`,
+        },
+        {
+          questionText: `${a1.name}が ${total}ひきいます。\n${removed}ひきが ほかの ばしょへ いきました。\nのこりは なんひきですか？`,
+          speechText:   `${a1.name}が${total}ひき。${removed}ひきがほかのばしょへいきました。のこりはなんひきですか？`,
+        },
+        {
+          questionText: `${a1.name}が ${total}ひきいます。\nともだちに ${removed}ひき あげました。\nのこりは なんひきですか？`,
+          speechText:   `${a1.name}が${total}ひき。ともだちに${removed}ひきあげました。のこりはなんひきですか？`,
+        },
+        {
+          questionText: `${a1.name}が ${total}ひきいます。\n${removed}ひきが にげてしまいました！\nのこりは なんひきですか？`,
+          speechText:   `${a1.name}が${total}ひき。${removed}ひきがにげてしまいました！のこりはなんひきですか？`,
+        },
+      ]);
+      return {
+        type: 'sub', subType: 'leaving',
+        a: total, b: removed, answer, animal1: a1,
+        formula:       `${a1.name} ${total} ー ${removed} ＝ ${answer}`,
+        formulaSpeech: `${total}ひく${removed}は${answer}`,
+        questionText:  tmpl.questionText,
+        speechText:    tmpl.speechText,
+      };
+    }
   }
 }
 
@@ -197,6 +294,7 @@ function startGame() {
   State.results   = [];
   State.numpadVal = '';
   State.answered  = false;
+  State.streak    = 0;
 
   document.getElementById('q-total').textContent = State.count;
   Fireworks.stop();
@@ -246,6 +344,11 @@ function renderAnimalDisplay(q) {
   if (q.type === 'add') {
     top.appendChild(makeAnimalGroup(q.animal1, q.a));
     top.appendChild(makeOpEl('＋'));
+    top.appendChild(makeAnimalGroup(q.animal2, q.b));
+  } else if (q.subType === 'difference') {
+    // ちがい問題：2グループ並べてマイナス表示
+    top.appendChild(makeAnimalGroup(q.animal1, q.a));
+    top.appendChild(makeOpEl('－'));
     top.appendChild(makeAnimalGroup(q.animal2, q.b));
   } else {
     top.appendChild(makeSubGroup(q.animal1, q.a, q.b));
@@ -408,17 +511,44 @@ function numpadConfirm() {
 
 // ===== 正解/不正解オーバーレイ =====
 function showAnswerResult(isOK, q) {
-  const overlay = document.getElementById('answer-overlay');
-  const mark    = document.getElementById('answer-mark');
-  const formula = document.getElementById('answer-formula');
+  const overlay   = document.getElementById('answer-overlay');
+  const mark      = document.getElementById('answer-mark');
+  const formula   = document.getElementById('answer-formula');
+  const streakEl  = document.getElementById('answer-streak');
+  const streakNum = document.getElementById('streak-count');
 
   mark.textContent = isOK ? '○' : '✕';
   mark.className   = 'answer-mark ' + (isOK ? 'correct' : 'wrong');
   formula.textContent = q.formula;
 
+  // 連続正解バッジ
+  if (isOK) {
+    State.streak++;
+    if (State.streak >= 3) {
+      streakNum.textContent = State.streak;
+      streakEl.style.display = 'block';
+      // アニメリセット
+      streakEl.style.animation = 'none';
+      void streakEl.offsetWidth;
+      streakEl.style.animation = '';
+    } else {
+      streakEl.style.display = 'none';
+    }
+  } else {
+    State.streak = 0;
+    streakEl.style.display = 'none';
+  }
+
   overlay.style.display = 'flex';
 
-  speak(isOK ? 'せいかい！' + q.formulaSpeech : 'ざんねん。' + q.formulaSpeech);
+  // ランダムメッセージ + 連続正解時は特別音声
+  if (isOK) {
+    const msg = rand(CORRECT_MSGS);
+    const streakMsg = State.streak >= 3 ? `${State.streak}もんれんぞく！` : '';
+    speak(streakMsg + msg + q.formulaSpeech);
+  } else {
+    speak(rand(WRONG_MSGS) + 'こたえは' + q.formulaSpeech);
+  }
 }
 
 // ===== 次の問題 =====
@@ -431,12 +561,23 @@ function nextQuestion() {
   }
 }
 
-// ===== やめる確認 =====
+// ===== やめる確認（カスタムダイアログ） =====
 function confirmQuit() {
-  if (confirm('やめますか？')) {
-    Fireworks.stop();
-    showScreen('menu');
-  }
+  // スコアに応じてアイコン変える
+  const pct = State.score / Math.max(State.current, 1);
+  const icon = pct >= 0.7 ? '😿' : pct >= 0.4 ? '🤔' : '😢';
+  document.getElementById('quit-icon').textContent = icon;
+  document.getElementById('quit-overlay').style.display = 'flex';
+}
+
+function closeQuitDialog() {
+  document.getElementById('quit-overlay').style.display = 'none';
+}
+
+function doQuit() {
+  closeQuitDialog();
+  Fireworks.stop();
+  showScreen('menu');
 }
 
 // ===== 最終結果 =====
