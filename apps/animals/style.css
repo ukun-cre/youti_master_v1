@@ -55,11 +55,13 @@ html, body {
   display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;
 }
 .menu-animal {
-  font-size: clamp(40px, 9vw, 58px);
-  display: inline-block;
-  filter: drop-shadow(0 4px 10px rgba(0,0,0,0.25));
+  display: inline-flex; align-items: center; justify-content: center;
+  width: clamp(52px, 12vw, 72px);
+  height: clamp(52px, 12vw, 72px);
+  filter: drop-shadow(0 4px 10px rgba(0,0,0,0.2));
   animation: animalBounce 1.6s ease-in-out infinite;
 }
+.menu-animal svg { width: 100%; height: 100%; }
 .menu-animal:nth-child(2) { animation-delay: 0.32s; }
 .menu-animal:nth-child(3) { animation-delay: 0.64s; }
 .menu-animal:nth-child(4) { animation-delay: 0.96s; }
@@ -158,11 +160,11 @@ html, body {
 #screen-game {
   background: linear-gradient(160deg, #E8F5FF 0%, #F3E8FF 60%, #FFF8E1 100%);
   padding: 0; position: relative;
-  /* overflow は .screen の overflow-y:auto に任せる */
+  overflow: hidden; /* topbar/progressは固定。スクロールは .game-scroll-area が担当 */
 }
 
 .game-topbar {
-  position: sticky; top: 0; z-index: 50;
+  flex-shrink: 0; /* 圧縮させない */
   display: flex; align-items: center; justify-content: space-between;
   padding: 52px 16px 12px;
   background: rgba(255,255,255,0.92);
@@ -181,8 +183,17 @@ html, body {
 .game-score-text { font-size: clamp(16px, 4vw, 20px); font-weight: 900; color: var(--orange); }
 
 .progress-wrap {
-  position: sticky; top: 104px; z-index: 49; /* topbar の高さ分だけ下に sticky */
+  flex-shrink: 0; /* 圧縮させない */
   height: 8px; background: rgba(0,0,0,0.08);
+}
+
+/* スクロール可能な本体エリア */
+.game-scroll-area {
+  flex: 1;
+  min-height: 0;              /* flex child でオーバーフローを有効にする必須設定 */
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: 24px;       /* 最下部ボタンの下に余白 */
 }
 .progress-fill {
   height: 100%; width: 0%;
@@ -236,7 +247,11 @@ html, body {
 .ag-emoji-grid.medium { font-size: clamp(16px, 4.5vw, 20px); max-width: clamp(90px, 38vw, 140px); }
 .ag-emoji-grid.small  { font-size: clamp(13px, 3.5vw, 16px); max-width: clamp(80px, 35vw, 130px); }
 
-.ag-emoji { line-height: 1.1; }
+.ag-emoji {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 1em; height: 1em;  /* font-size に連動してスケール */
+}
+.ag-emoji svg { width: 100%; height: 100%; }
 .ag-emoji.leaving {
   opacity: 0.3; filter: grayscale(90%);
   animation: leavingPulse 1.2s ease-in-out infinite;
@@ -325,7 +340,7 @@ html, body {
 /* ===== 入力式 ===== */
 #area-input {
   flex-direction: column; align-items: center; gap: 12px;
-  padding: 0 16px 40px; /* 下余白でOKボタンが確実に見える */
+  padding: 0 16px 16px;
 }
 
 .numpad-display-box {
