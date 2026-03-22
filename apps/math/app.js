@@ -101,6 +101,8 @@ const app = {
         window.speechSynthesis.cancel();
         const msg = new SpeechSynthesisUtterance(text);
         msg.lang = 'ja-JP'; msg.rate = 0.9; msg.pitch = 1.2;
+        const v = typeof SpeechUtil !== 'undefined' ? SpeechUtil.getVoice() : null;
+        if (v) msg.voice = v;
         window.speechSynthesis.speak(msg);
     },
 
