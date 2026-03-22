@@ -159,8 +159,9 @@ html, body {
    =========================== */
 #screen-game {
   background: linear-gradient(160deg, #E8F5FF 0%, #F3E8FF 60%, #FFF8E1 100%);
-  padding: 0; position: relative;
-  overflow: hidden; /* topbar/progressは固定。スクロールは .game-scroll-area が担当 */
+  padding: 0;
+  /* position: relative を削除 → .screen の position: fixed が有効になり高さが確定する */
+  overflow: hidden;
 }
 
 .game-topbar {
@@ -190,10 +191,10 @@ html, body {
 /* スクロール可能な本体エリア */
 .game-scroll-area {
   flex: 1;
-  min-height: 0;              /* flex child でオーバーフローを有効にする必須設定 */
-  overflow-y: auto;
+  min-height: 0;
+  overflow-y: scroll;                  /* auto→scroll に変更 (iOS対応) */
   -webkit-overflow-scrolling: touch;
-  padding-bottom: 24px;       /* 最下部ボタンの下に余白 */
+  padding-bottom: 60px;
 }
 .progress-fill {
   height: 100%; width: 0%;
@@ -212,13 +213,13 @@ html, body {
 
 .game-animal-display {
   display: flex; flex-direction: column; align-items: center;
-  gap: 8px; padding: 12px 8px; min-height: 100px;
+  gap: 10px; padding: 10px 8px 6px;
 }
 
 /* 式の上段（動物グループ + 演算子） */
 .formula-top {
-  display: flex; align-items: center; justify-content: center;
-  gap: 8px; flex-wrap: wrap;
+  display: flex; align-items: flex-start; justify-content: center;
+  gap: 6px; flex-wrap: wrap;
 }
 
 /* 式の下段（＝ ？） */
@@ -228,52 +229,68 @@ html, body {
 
 /* 動物グループ */
 .animal-group {
-  background: var(--ab, #fff);
-  border: 3px solid var(--ac, #ccc);
-  border-radius: 18px; padding: 8px 10px;
-  text-align: center; min-width: 68px; max-width: 48vw;
-  box-shadow: 0 4px 14px rgba(0,0,0,0.12);
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+  max-width: 44vw;
 }
 
-.ag-label {
-  font-size: 11px; font-weight: 900; color: var(--ac, #999);
-  margin-bottom: 4px; letter-spacing: 0.5px;
-}
-
-.ag-emoji-grid {
+/* 動物アイコングリッド */
+.ag-icon-grid {
   display: flex; flex-wrap: wrap; justify-content: center;
-  gap: 1px; max-width: clamp(100px, 40vw, 160px); font-size: clamp(20px, 5.5vw, 26px);
+  gap: 4px; max-width: 44vw;
 }
-.ag-emoji-grid.medium { font-size: clamp(16px, 4.5vw, 20px); max-width: clamp(90px, 38vw, 140px); }
-.ag-emoji-grid.small  { font-size: clamp(13px, 3.5vw, 16px); max-width: clamp(80px, 35vw, 130px); }
 
-.ag-emoji {
-  display: inline-flex; align-items: center; justify-content: center;
-  width: 1em; height: 1em;  /* font-size に連動してスケール */
+/* 個別動物アイコン（大きく！） */
+.ag-icon {
+  width: clamp(40px, 11vw, 56px);
+  height: clamp(40px, 11vw, 56px);
+  flex-shrink: 0;
+  filter: drop-shadow(0 3px 6px rgba(0,0,0,0.2));
+  animation: animalPopIn 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.5) backwards,
+             iconBob 2.2s ease-in-out 0.35s infinite;
 }
-.ag-emoji svg { width: 100%; height: 100%; }
-.ag-emoji.leaving {
-  opacity: 0.3; filter: grayscale(90%);
-  animation: leavingPulse 1.2s ease-in-out infinite;
+.ag-icon.small {
+  width: clamp(28px, 7.5vw, 40px);
+  height: clamp(28px, 7.5vw, 40px);
+}
+.ag-icon svg { width: 100%; height: 100%; }
+
+@keyframes animalPopIn {
+  0%   { transform: scale(0) rotate(-20deg); opacity: 0; }
+  70%  { transform: scale(1.25) rotate(6deg); opacity: 1; }
+  100% { transform: scale(1) rotate(0deg); opacity: 1; }
+}
+@keyframes iconBob {
+  0%, 100% { transform: translateY(0) rotate(-4deg) scale(1); }
+  50%       { transform: translateY(-6px) rotate(4deg) scale(1.06); }
+}
+
+/* 帰るアニメ */
+.ag-icon.leaving {
+  opacity: 0.28;
+  filter: grayscale(85%) drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+  animation: leavingPulse 1.3s ease-in-out infinite !important;
 }
 @keyframes leavingPulse {
-  0%, 100% { opacity: 0.3; transform: scale(1); }
-  50%       { opacity: 0.5; transform: scale(0.85); }
+  0%, 100% { opacity: 0.28; transform: scale(0.88); }
+  50%       { opacity: 0.45; transform: scale(1); }
 }
 
-.ag-count {
-  margin-top: 5px; font-size: 13px; font-weight: 900; color: var(--ac, #999);
+/* 動物名＋ひき数ラベル */
+.ag-name-label {
+  font-size: clamp(13px, 3.5vw, 16px); font-weight: 900; text-align: center;
+  background: white; border-radius: 20px; padding: 3px 14px;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.1);
 }
 
 .ag-leaving-note {
-  margin-top: 7px; font-size: 11px; font-weight: 700; color: var(--red);
-  background: rgba(255,71,87,0.1); border-radius: 8px; padding: 3px 8px;
+  font-size: clamp(11px, 2.8vw, 13px); font-weight: 700; color: var(--red);
+  background: rgba(255,71,87,0.1); border-radius: 8px; padding: 3px 10px;
 }
 
 .ag-operator {
-  font-size: clamp(28px, 7vw, 42px); font-weight: 900;
+  font-size: clamp(30px, 8vw, 46px); font-weight: 900;
   color: var(--purple); text-shadow: 0 2px 8px rgba(168,85,247,0.3);
-  padding: 0 4px;
+  padding: 0 2px; margin-top: 8px;
 }
 
 .ag-question-mark {
