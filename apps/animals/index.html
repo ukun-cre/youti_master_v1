@@ -16,13 +16,11 @@
 <!-- 花火キャンバス -->
 <canvas id="fireworks-canvas"></canvas>
 
-<!-- ハブへ戻る -->
-<a href="../../index.html" id="back-to-hub">
-  <span class="hub-icon">🏠</span><span>もどる</span>
-</a>
-
 <!-- ===== メニュー ===== -->
 <div class="screen active" id="screen-menu">
+  <!-- ハブへ戻るボタン（メニュー内） -->
+  <a href="../../index.html" class="menu-hub-btn">🏠 ぜんたいメニューへ</a>
+
   <div class="menu-animals-row" id="menu-animals"></div>
   <div class="menu-title-wrap">
     <div class="menu-title-badge">🐾 どうぶつ かぞえ 🐾</div>
@@ -67,6 +65,14 @@
       <div class="toggle-group" id="tg-count">
         <button class="toggle-btn active" data-value="5" onclick="selectOpt('count','5',this)">5もん</button>
         <button class="toggle-btn" data-value="10" onclick="selectOpt('count','10',this)">10もん</button>
+      </div>
+    </div>
+
+    <!-- 音声オン/オフ -->
+    <div class="setup-section">
+      <p class="setup-label">おんせい</p>
+      <div class="toggle-group">
+        <button class="toggle-btn active" id="mute-btn" onclick="toggleMute(this)">🔊 おんせい あり</button>
       </div>
     </div>
 
@@ -126,9 +132,14 @@
     </div>
 
   </div><!-- ↑スクロールエリア終わり↑ -->
+
+  <!-- 正解/不正解オーバーレイ -->
   <div class="answer-overlay" id="answer-overlay" style="display:none">
     <div class="answer-overlay-card">
       <div class="answer-mark" id="answer-mark">○</div>
+      <div class="answer-streak" id="answer-streak" style="display:none">
+        🔥 <span id="streak-count">3</span>れんぞく！！
+      </div>
       <div class="answer-formula" id="answer-formula">3 ＋ 4 ＝ 7</div>
       <button class="btn-next" onclick="nextQuestion()">つぎへ ▶</button>
     </div>
@@ -165,6 +176,17 @@
       <button class="btn-retry" onclick="startGame()">もう一度</button>
       <button class="btn-menu" onclick="showScreen('menu'); speak('また あそんでね！')">メニューへ</button>
     </div>
+  </div>
+</div>
+
+<!-- ===== やめる確認ダイアログ（カスタム） ===== -->
+<div id="quit-overlay" style="display:none">
+  <div id="quit-card">
+    <div class="quit-icon" id="quit-icon">😿</div>
+    <p class="quit-title">やめちゃうの？</p>
+    <p class="quit-sub">これまでのこたえは きえてしまうよ…</p>
+    <button class="quit-btn-continue" onclick="closeQuitDialog()">▶ つづける！</button>
+    <button class="quit-btn-leave" onclick="doQuit()">🏠 やめる</button>
   </div>
 </div>
 
