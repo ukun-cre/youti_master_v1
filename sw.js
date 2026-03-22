@@ -3,7 +3,7 @@
    統合Service Worker（全サブアプリをキャッシュ）
    ========================================== */
 
-const CACHE_NAME = 'manabiland-v1';
+const CACHE_NAME = 'manabiland-v2';
 
 // キャッシュするアセット一覧
 const ASSETS = [
@@ -24,6 +24,10 @@ const ASSETS = [
   './apps/juucombo/index.html',
   './apps/juucombo/style.css',
   './apps/juucombo/app.js',
+  // 5のなかよしアプリ
+  './apps/no5/index.html',
+  './apps/no5/style.css',
+  './apps/no5/app.js',
   // Googleフォント（キャッシュ試行）
   'https://fonts.googleapis.com/css2?family=Kosugi+Maru&family=Noto+Sans+JP:wght@400;700;900&display=swap',
 ];
@@ -50,20 +54,20 @@ self.addEventListener('activate', event => {
   );
 });
 
-/* Fetch: キャッシュファースト戦略 */
+/* Fetch: ネットワークファースト戦略（常に最新版を取得、オフライン時はキャッシュを使用） */
 self.addEventListener('fetch', event => {
   if (event.request.method !== 'GET') return;
 
   event.respondWith(
-    caches.match(event.request).then(cached => {
-      if (cached) return cached;
-      return fetch(event.request).then(response => {
-        if (response && response.status === 200 && response.type !== 'opaque') {
-          const clone = response.clone();
-          caches.open(CACHE_NAME).then(cache => cache.put(event.request, clone));
-        }
-        return response;
-      }).catch(() => {
+    fetch(event.request).then(response => {
+      if (response && response.status === 200 && response.type !== 'opaque') {
+        const clone = response.clone();
+        caches.open(CACHE_NAME).then(cache => cache.put(event.request, clone));
+      }
+      return response;
+    }).catch(() => {
+      return caches.match(event.request).then(cached => {
+        if (cached) return cached;
         if (event.request.headers.get('accept')?.includes('text/html')) {
           return caches.match('./index.html');
         }
