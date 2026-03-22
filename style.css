@@ -151,6 +151,9 @@ html, body {
 .app-card--clock {
   background: linear-gradient(135deg, var(--green) 0%, #00695c 100%);
 }
+.app-card--animals {
+  background: linear-gradient(135deg, #FF6B9D 0%, #A855F7 100%);
+}
 /* 4つ目以降のカード用（将来の追加用） */
 .app-card--new4 {
   background: linear-gradient(135deg, var(--green) 0%, #00695c 100%);
