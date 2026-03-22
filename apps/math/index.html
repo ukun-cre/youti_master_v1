@@ -16,9 +16,46 @@
         <div id="view-menu" class="view active">
             <h1>🍩 さんすうおやつ 🍎<br>だいぼうけん</h1>
             <div class="character-container" id="menu-characters"></div>
-            <button class="btn btn-primary" onclick="app.startGame()">あそぼう！ (スタート)</button>
+            <button class="btn btn-primary" onclick="app.goLevel()">あそぼう！ (スタート)</button>
             <button class="btn btn-secondary" onclick="app.switchView('view-settings')">せってい</button>
             <button class="btn btn-secondary" onclick="app.switchView('view-records')">きろく</button>
+        </div>
+
+        <div id="view-level" class="view">
+            <h2>むずかしさを えらんでね</h2>
+            <div class="setup-choices">
+                <button class="setup-choice-btn" data-lv="1" onclick="app.selectLevel(1)">
+                    <span class="choice-label">レベル1</span>
+                    <span class="choice-sub">5まで</span>
+                </button>
+                <button class="setup-choice-btn" data-lv="2" onclick="app.selectLevel(2)">
+                    <span class="choice-label">レベル2</span>
+                    <span class="choice-sub">10まで</span>
+                </button>
+                <button class="setup-choice-btn" data-lv="3" onclick="app.selectLevel(3)">
+                    <span class="choice-label">レベル3</span>
+                    <span class="choice-sub">20まで</span>
+                </button>
+            </div>
+            <button class="btn btn-primary" style="margin-top:24px" onclick="app.goCount()">つぎへ →</button>
+            <button class="btn btn-secondary" onclick="app.switchView('view-menu')">← もどる</button>
+        </div>
+
+        <div id="view-count" class="view">
+            <h2>もんだいすうを えらんでね</h2>
+            <div class="setup-choices">
+                <button class="setup-choice-btn" data-cnt="5"  onclick="app.selectCount(5)">
+                    <span class="choice-label">5もん</span>
+                </button>
+                <button class="setup-choice-btn" data-cnt="7"  onclick="app.selectCount(7)">
+                    <span class="choice-label">7もん</span>
+                </button>
+                <button class="setup-choice-btn" data-cnt="10" onclick="app.selectCount(10)">
+                    <span class="choice-label">10もん</span>
+                </button>
+            </div>
+            <button class="btn btn-primary" style="margin-top:24px" onclick="app.startGame()">🎮 スタート！</button>
+            <button class="btn btn-secondary" onclick="app.goLevel()">← もどる</button>
         </div>
 
         <div id="view-settings" class="view">
@@ -26,22 +63,6 @@
             <div class="setting-group">
                 <label>おと (BGM・こえ)</label>
                 <button id="btn-sound" class="btn btn-toggle" onclick="app.toggleSound()">ON</button>
-            </div>
-            <div class="setting-group">
-                <label>むずかしさ</label>
-                <select id="select-level" onchange="app.saveSettings()">
-                    <option value="1">レベル1 (5まで)</option>
-                    <option value="2">レベル2 (10まで)</option>
-                    <option value="3">レベル3 (20まで)</option>
-                </select>
-            </div>
-            <div class="setting-group">
-                <label>もんだいすう</label>
-                <select id="select-count" onchange="app.saveSettings()">
-                    <option value="5">5もん</option>
-                    <option value="7">7もん</option>
-                    <option value="10">10もん</option>
-                </select>
             </div>
             <button class="btn btn-primary" onclick="app.switchView('view-menu')">もどる</button>
         </div>
@@ -70,8 +91,8 @@
 
             <div id="snacks-container" class="snacks-area"></div>
 
-            <div id="choices-container" class="choices-area">
-                </div>
+            <div id="choices-container" class="choices-area"></div>
+            <button id="nextBtn" class="btn btn-next" onclick="app.goNext()" style="display:none">つぎへ →</button>
         </div>
 
         <div id="view-result" class="view">

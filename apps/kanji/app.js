@@ -851,8 +851,9 @@ const App={
     State.totalQuestions=batch.length;
     State.score=State.combo=State.maxCombo=State.answered=0; State.results=[];
     State.questionQueue=batch;
-    // モード表示（リビューモードの場合はメッセージ）
+    Store.save();
     if(State.deckMode==='review') setTimeout(()=>Speech.say('まちがえた漢字をれんしゅうしよう！'),300);
+    document.getElementById('nextBtn').style.display='none';
     this.showScreen('game');
     this._updateProgress();
     this._nextQuestion();
@@ -912,7 +913,17 @@ const App={
     State.answered++;
     this._updateScoreChip();
     this._updateProgress();
-    setTimeout(()=>this._nextQuestion(),1800);
+    setTimeout(()=>{ document.getElementById('nextBtn').style.display='block'; },600);
+  },
+
+  goNext(){
+    document.getElementById('nextBtn').style.display='none';
+    this._nextQuestion();
+  },
+
+  goSetup(){
+    [5,7,10].forEach(n=>document.getElementById(`count-${n}`).classList.toggle('active',State.questionCount===n));
+    this.showScreen('count');
   },
 
   _updateProgress(){ document.getElementById('progressBar').style.width=(State.answered/State.totalQuestions*100)+'%'; },

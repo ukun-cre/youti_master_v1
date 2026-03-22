@@ -48,8 +48,26 @@
   </div>
 
   <div class="menu-buttons">
-    <button class="menu-btn btn-start" onclick="startGame()">
+    <button class="menu-btn btn-start" onclick="goSetup()">
       <span>🎮 ゲームスタート</span>
+    </button>
+  </div>
+</div>
+
+<!-- ===== セットアップ画面 ===== -->
+<div class="screen" id="screen-setup">
+  <div class="setup-wrap">
+    <div class="setup-title">もんだいを なんもん やる？</div>
+    <div class="setup-choices">
+      <button class="setup-cnt-btn active" data-n="5"  onclick="selectCount(5)">5もん</button>
+      <button class="setup-cnt-btn"        data-n="7"  onclick="selectCount(7)">7もん</button>
+      <button class="setup-cnt-btn"        data-n="10" onclick="selectCount(10)">10もん</button>
+    </div>
+    <button class="menu-btn btn-start" style="margin-top:24px" onclick="startGame()">
+      <span>🎮 スタート！</span>
+    </button>
+    <button class="menu-btn" style="margin-top:10px;background:#ccc;color:#555" onclick="showScreen('menu')">
+      <span>← もどる</span>
     </button>
   </div>
 </div>
@@ -83,6 +101,7 @@
   <div class="choices-grid" id="choicesGrid"></div>
 
   <div class="combo-display" id="comboDisplay"></div>
+  <button id="nextBtn" class="next-btn" onclick="goNext()" style="display:none">つぎへ →</button>
 </div>
 
 <!-- ===== リザルト画面 ===== -->

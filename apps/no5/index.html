@@ -17,9 +17,21 @@
         <div id="menu-screen" class="screen active">
             <h1>🐶 ひらがな<br>どっちかな？ 🐱</h1>
             <p class="menu-desc">にたひらがなをくべつしよう！</p>
-            <button class="btn primary-btn" onclick="no5App.startGame()">ゲームスタート！</button>
+            <button class="btn primary-btn" onclick="no5App.goSetup()">ゲームスタート！</button>
             <button class="btn secondary-btn" onclick="no5App.showScreen('records-screen')">きろく 🏆</button>
             <button class="btn settings-btn" onclick="no5App.showScreen('settings-screen')">せってい ⚙️</button>
+        </div>
+
+        <!-- ===== 問題数選択 ===== -->
+        <div id="count-setup-screen" class="screen hidden">
+            <h2>もんだいすうを えらんでね</h2>
+            <div class="setup-cnt-row">
+                <button class="setup-cnt-btn" id="setup-cnt-5"  onclick="no5App.setupSelectCount(5)">5もん</button>
+                <button class="setup-cnt-btn" id="setup-cnt-7"  onclick="no5App.setupSelectCount(7)">7もん</button>
+                <button class="setup-cnt-btn" id="setup-cnt-10" onclick="no5App.setupSelectCount(10)">10もん</button>
+            </div>
+            <button class="btn primary-btn" style="margin-top:24px" onclick="no5App.startGame()">🎮 スタート！</button>
+            <button class="btn secondary-btn" onclick="no5App.showScreen('menu-screen')">← もどる</button>
         </div>
 
         <!-- ===== クイズ ===== -->
@@ -41,6 +53,7 @@
             </div>
             <button class="btn speak-btn" onclick="no5App.speakCurrent()">🔊 もういちどきく</button>
             <div id="feedback-msg" class="feedback-msg"></div>
+            <button id="nextBtn" class="btn next-btn" onclick="no5App.goNext()" style="display:none">つぎへ →</button>
         </div>
 
         <!-- ===== 結果 ===== -->
@@ -79,14 +92,6 @@
             <div class="setting-item">
                 <label>おと（音声）</label>
                 <input type="checkbox" id="sound-toggle" checked onchange="no5App.toggleSound()">
-            </div>
-            <div class="setting-item">
-                <label>もんだいすう</label>
-                <div class="count-buttons">
-                    <button class="count-btn active" id="cnt-5" onclick="no5App.setCount(5)">5もん</button>
-                    <button class="count-btn" id="cnt-7" onclick="no5App.setCount(7)">7もん</button>
-                    <button class="count-btn" id="cnt-10" onclick="no5App.setCount(10)">10もん</button>
-                </div>
             </div>
             <button class="btn primary-btn" onclick="no5App.showScreen('menu-screen')">もどる</button>
         </div>

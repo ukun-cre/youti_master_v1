@@ -137,3 +137,30 @@ h2 { color: var(--purple); font-size: 1.8rem; font-weight: 900; }
     transition: all 0.2s;
 }
 .count-btn.active { border-color: var(--pink); background: #FFF0F8; color: var(--pink); }
+
+/* ===== SETUP SCREEN ===== */
+#count-setup-screen {
+    display: none; flex-direction: column; align-items: center;
+    justify-content: center; gap: 16px; padding: 40px 24px;
+}
+#count-setup-screen.active { display: flex; }
+.setup-cnt-row { display: flex; gap: 14px; justify-content: center; }
+.setup-cnt-btn {
+    width: 90px; height: 90px; border: 4px solid #ddd; border-radius: 20px;
+    background: white; font-family: inherit; font-size: 20px; font-weight: 900;
+    cursor: pointer; color: #555; transition: all 0.15s;
+}
+.setup-cnt-btn.active {
+    border-color: #FF69B4; background: #FF69B4; color: white;
+    box-shadow: 0 4px 0 #c0568d;
+}
+
+/* ===== NEXT BUTTON ===== */
+.next-btn {
+    display: block; margin: 16px auto 0;
+    padding: 16px 48px; border-radius: 28px;
+    background: linear-gradient(135deg, #4ECDC4, #009688);
+    color: white; font-size: 20px; font-weight: 900;
+    box-shadow: 0 5px 0 #00695c; border: none; cursor: pointer;
+}
+.next-btn:active { transform: translateY(3px); box-shadow: 0 2px 0 #00695c; }
