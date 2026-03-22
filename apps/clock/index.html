@@ -18,9 +18,8 @@
             <div class="owl-mascot" id="menu-owl"></div>
             <h1>🕐 とけいを<br>よもう！</h1>
             <div class="speech-bubble" id="menu-bubble">じかんを おぼえよう！🦉</div>
-            <button class="btn btn-primary" onclick="app.goToSettings()">あそぼう！</button>
-            <button class="btn btn-secondary" onclick="app.switchView('view-level')">レベルをえらぶ</button>
-            <button class="btn btn-secondary" onclick="app.switchView('view-records')">きろく</button>
+            <button class="btn btn-primary" onclick="app.goToSettings()">▶ はじめる！</button>
+            <button class="btn btn-secondary" onclick="app.switchView('view-records'); app.renderRecords();">🏆 きろく</button>
         </div>
 
         <!-- ===== レベル選択 ===== -->
@@ -31,12 +30,12 @@
         </div>
 
         <!-- ===== 設定 ===== -->
-        <div id="view-settings" class="view">
-            <h2>⚙️ せってい</h2>
+        <div id="view-settings" class="view" style="justify-content: flex-start; padding-top: 16px;">
+            <h2>🎯 レベル・せってい</h2>
 
             <div class="setting-group">
-                <label>おと</label>
-                <button id="btn-sound" class="btn btn-toggle" onclick="app.toggleSound()">ON</button>
+                <label>レベルをえらんでね</label>
+                <div class="level-list" id="level-list-settings" style="max-height: none;"></div>
             </div>
 
             <div class="setting-group">
@@ -57,7 +56,12 @@
                 </div>
             </div>
 
-            <button class="btn btn-primary" onclick="app.startGame()">スタート！</button>
+            <div class="setting-group">
+                <label>おと</label>
+                <button id="btn-sound" class="btn btn-toggle" onclick="app.toggleSound()">ON</button>
+            </div>
+
+            <button class="btn btn-primary" onclick="app.startGame()">▶ スタート！</button>
             <button class="btn btn-secondary" onclick="app.switchView('view-menu')">もどる</button>
         </div>
 
@@ -65,7 +69,7 @@
         <div id="view-records" class="view">
             <h2>🏆 きろく</h2>
             <div id="records-content" class="records-scroll"></div>
-            <button class="btn btn-primary" onclick="app.switchView('view-menu')">もどる</button>
+            <button class="btn btn-secondary" onclick="app.switchView('view-menu')">もどる</button>
         </div>
 
         <!-- ===== ゲーム ===== -->
@@ -188,6 +192,9 @@
 
             <!-- フィードバック -->
             <div id="feedback" class="feedback hidden"></div>
+
+            <!-- 次へボタン -->
+            <button id="btn-next" class="btn btn-primary hidden" onclick="app.nextQuestion()">つぎへ →</button>
         </div>
 
         <!-- ===== リザルト ===== -->
