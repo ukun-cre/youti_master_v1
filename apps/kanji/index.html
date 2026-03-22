@@ -88,6 +88,21 @@
     </div>
   </div>
 
+  <!-- 学年選択 -->
+  <div class="grade-selector">
+    <button class="grade-btn active" id="grade-btn-1" onclick="App.setGrade(1)">
+      <span class="grade-num">1</span>年生
+      <span class="grade-sub">80字</span>
+    </button>
+    <button class="grade-btn" id="grade-btn-2" onclick="App.setGrade(2)">
+      <span class="grade-num">2</span>年生
+      <span class="grade-sub">160字</span>
+    </button>
+  </div>
+  <div class="grade-info">
+    <span id="gradeLabel">1年生</span>の漢字（<span id="gradeTotal">80字</span>）でれんしゅう中！
+  </div>
+
   <div class="menu-buttons">
     <button class="menu-btn btn-start" onclick="App.goSetup()" id="btnStart">
       <span class="btn-icon">🎮</span>
@@ -175,6 +190,7 @@
     <h2>🏆 きろく</h2>
   </div>
   <div class="records-body">
+    <div class="record-grade-badge" id="recordGradeBadge">1年生</div>
     <div class="trophy-display">
       <div class="trophy-icon" id="trophyIcon">🏆</div>
       <div class="record-label">さいこうれんぞくせいかい</div>

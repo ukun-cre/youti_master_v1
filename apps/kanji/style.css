@@ -48,7 +48,7 @@ html, body {
 #screen-menu {
   background: linear-gradient(160deg, #FFF0F8 0%, #F0F8FF 50%, #FFFFF0 100%);
   align-items: center;
-  padding: 20px 20px 30px;
+  padding: 60px 20px 30px;
   position: relative;
 }
 
@@ -143,11 +143,48 @@ html, body {
 .btn-label { font-size: clamp(16px,4.5vw,20px); }
 
 /* ===========================
+   GRADE SELECTOR
+   =========================== */
+.grade-selector {
+  display: flex; gap: 10px;
+  position: relative; z-index: 1;
+}
+.grade-btn {
+  display: flex; flex-direction: column; align-items: center; gap: 2px;
+  padding: 10px 22px; border: 3px solid #ddd; border-radius: 20px;
+  background: white; cursor: pointer; font-family: inherit;
+  font-size: 16px; font-weight: 900; color: #aaa;
+  transition: all 0.2s; line-height: 1.2;
+}
+.grade-btn.active {
+  border-color: var(--pink);
+  background: linear-gradient(135deg, #FF6B9D, #A855F7);
+  color: white;
+  box-shadow: 0 4px 14px rgba(255,107,157,0.4);
+}
+.grade-btn:active { transform: scale(0.96); }
+.grade-num { font-size: 24px; line-height: 1; }
+.grade-sub { font-size: 11px; opacity: 0.8; }
+
+.grade-info {
+  font-size: 13px; color: #888; font-weight: 700; text-align: center;
+  position: relative; z-index: 1;
+}
+.grade-info span { color: var(--pink); font-weight: 900; }
+
+.record-grade-badge {
+  background: linear-gradient(135deg, var(--pink), var(--purple));
+  color: white; font-size: 14px; font-weight: 900;
+  border-radius: 20px; padding: 4px 16px;
+  align-self: center; margin-bottom: 4px;
+}
+
+/* ===========================
    COMMON HEADER
    =========================== */
 .screen-header {
   display: flex; align-items: center; gap: 16px;
-  padding: 20px 20px 10px;
+  padding: 54px 20px 10px;
 }
 .settings-header { background: linear-gradient(135deg, var(--blue), var(--purple)); color:white; border-radius: 0 0 24px 24px; }
 .records-header  { background: linear-gradient(135deg, var(--yellow), var(--orange)); color: #4a2800; border-radius: 0 0 24px 24px; }
@@ -266,7 +303,7 @@ input:checked + .toggle-slider::before { transform: translateX(28px); }
   padding-bottom: 20px;
 }
 .game-topbar {
-  display:flex; align-items:center; gap:10px; padding:14px 16px 8px;
+  display:flex; align-items:center; gap:10px; padding:54px 16px 8px;
 }
 .quit-btn {
   background: #ffebee; border: none; color: var(--red); font-size:18px;
