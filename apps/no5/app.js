@@ -134,7 +134,7 @@ const quizData = [
    APP STATE
    ============================================================ */
 const no5App = {
-    settings: { sound: true, count: 5 },
+    settings: { sound: false, count: 5 },
     state: { current: 0, roundCorrect: 0, roundResults: [], questionList: [] },
 
     init() {
@@ -209,7 +209,7 @@ const no5App = {
     },
 
     quitGame() {
-        if (confirm('ゲームをやめますか？')) { this.showScreen('menu-screen'); }
+        this.showScreen('menu-screen');
     },
 
     loadQuestion() {
