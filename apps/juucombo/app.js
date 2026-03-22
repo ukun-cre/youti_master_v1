@@ -191,7 +191,25 @@ function checkAnswer(btn, chosen, answer, knownNum) {
   State.answered++;
   document.getElementById('scoreChip').textContent = `⭐ ${State.score}`;
   updateProgress();
-  setTimeout(nextQuestion, 1800);
+  setTimeout(() => { document.getElementById('nextBtn').style.display = 'block'; }, 600);
+}
+
+function goNext() {
+  document.getElementById('nextBtn').style.display = 'none';
+  nextQuestion();
+}
+
+function goSetup() {
+  if (demoInterval) { clearInterval(demoInterval); demoInterval = null; }
+  document.querySelectorAll('.setup-cnt-btn').forEach(b =>
+    b.classList.toggle('active', parseInt(b.dataset.n) === State.totalQuestions));
+  showScreen('setup');
+}
+
+function selectCount(n) {
+  State.totalQuestions = n;
+  document.querySelectorAll('.setup-cnt-btn').forEach(b =>
+    b.classList.toggle('active', parseInt(b.dataset.n) === n));
 }
 
 function updateProgress() {

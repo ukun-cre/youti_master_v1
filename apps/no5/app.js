@@ -160,10 +160,6 @@ const no5App = {
     updateSettingsUI() {
         const toggle = document.getElementById('sound-toggle');
         if (toggle) toggle.checked = this.settings.sound;
-        [5, 7, 10].forEach(n => {
-            const btn = document.getElementById(`cnt-${n}`);
-            if (btn) btn.classList.toggle('active', this.settings.count === n);
-        });
     },
 
     setCount(n) {
@@ -200,13 +196,15 @@ const no5App = {
 
     /* ── ゲーム開始 ── */
     startGame() {
-        // ランダムにcount問を選ぶ
         const shuffled = [...quizData].sort(() => Math.random() - 0.5);
         this.state.questionList = shuffled.slice(0, this.settings.count);
         this.state.current = 0;
         this.state.roundCorrect = 0;
         this.state.roundResults = [];
+        this.saveSettings();
         this.showScreen('quiz-screen');
+        const nb = document.getElementById('nextBtn');
+        if (nb) nb.style.display = 'none';
         this.loadQuestion();
     },
 
@@ -276,14 +274,33 @@ const no5App = {
         const fill = document.getElementById('progress-fill');
         if (fill) fill.style.width = (((this.state.current + 1) / this.settings.count) * 100) + '%';
 
-        setTimeout(() => {
-            this.state.current++;
-            if (this.state.current >= this.settings.count) {
-                this.showResult();
-            } else {
-                this.loadQuestion();
-            }
-        }, 1400);
+        setTimeout(() => { document.getElementById('nextBtn').style.display = 'block'; }, 600);
+    },
+
+    goNext() {
+        document.getElementById('nextBtn').style.display = 'none';
+        this.state.current++;
+        if (this.state.current >= this.settings.count) {
+            this.showResult();
+        } else {
+            this.loadQuestion();
+        }
+    },
+
+    goSetup() {
+        [5, 7, 10].forEach(n => {
+            const b = document.getElementById(`setup-cnt-${n}`);
+            if (b) b.classList.toggle('active', this.settings.count === n);
+        });
+        this.showScreen('count-setup-screen');
+    },
+
+    setupSelectCount(n) {
+        this.settings.count = n;
+        [5, 7, 10].forEach(c => {
+            const b = document.getElementById(`setup-cnt-${c}`);
+            if (b) b.classList.toggle('active', c === n);
+        });
     },
 
     showResult() {

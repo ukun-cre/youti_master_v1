@@ -89,7 +89,7 @@
   </div>
 
   <div class="menu-buttons">
-    <button class="menu-btn btn-start" onclick="App.startGame()" id="btnStart">
+    <button class="menu-btn btn-start" onclick="App.goSetup()" id="btnStart">
       <span class="btn-icon">🎮</span>
       <span class="btn-label">ゲームスタート</span>
     </button>
@@ -104,6 +104,29 @@
   </div>
 </div>
 
+<!-- ===== COUNT SETUP SCREEN ===== -->
+<div id="screen-count" class="screen">
+  <div class="setup-body">
+    <div class="setup-title">もんだいすうを えらんでね</div>
+    <div class="count-options">
+      <button class="count-btn active" id="count-5" onclick="App.setQuestionCount(5)">
+        <span class="count-num">5</span>
+        <span class="count-unit">もん</span>
+      </button>
+      <button class="count-btn" id="count-7" onclick="App.setQuestionCount(7)">
+        <span class="count-num">7</span>
+        <span class="count-unit">もん</span>
+      </button>
+      <button class="count-btn" id="count-10" onclick="App.setQuestionCount(10)">
+        <span class="count-num">10</span>
+        <span class="count-unit">もん</span>
+      </button>
+    </div>
+    <button class="save-btn" onclick="App.startGame()">🎮 スタート！</button>
+    <button class="back-btn-large" onclick="App.showScreen('menu')">← もどる</button>
+  </div>
+</div>
+
 <!-- ===== SETTINGS SCREEN ===== -->
 <div id="screen-settings" class="screen">
   <div class="screen-header settings-header">
@@ -111,7 +134,6 @@
     <h2>⚙️ せってい</h2>
   </div>
   <div class="settings-body">
-
     <div class="settings-card">
       <div class="settings-neko-mini">
         <svg viewBox="0 0 100 80" width="70" height="56">
@@ -140,25 +162,6 @@
         </label>
       </div>
     </div>
-
-    <div class="settings-card">
-      <h3 class="settings-section-title">📝 もんだいすう</h3>
-      <div class="count-options">
-        <button class="count-btn active" id="count-5" onclick="App.setQuestionCount(5)">
-          <span class="count-num">5</span>
-          <span class="count-unit">もん</span>
-        </button>
-        <button class="count-btn" id="count-7" onclick="App.setQuestionCount(7)">
-          <span class="count-num">7</span>
-          <span class="count-unit">もん</span>
-        </button>
-        <button class="count-btn" id="count-10" onclick="App.setQuestionCount(10)">
-          <span class="count-num">10</span>
-          <span class="count-unit">もん</span>
-        </button>
-      </div>
-    </div>
-
     <button class="save-btn" onclick="App.saveSettings()">
       <span>💾 ほぞんする</span>
     </button>
@@ -280,6 +283,7 @@
 
   <!-- Combo display -->
   <div class="combo-display" id="comboDisplay"></div>
+  <button id="nextBtn" class="next-btn-kanji" onclick="App.goNext()" style="display:none">つぎへ →</button>
 </div>
 
 <!-- ===== RESULT SCREEN ===== -->

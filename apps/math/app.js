@@ -31,9 +31,36 @@ const app = {
     },
 
     saveSettings() {
-        this.settings.level = parseInt(document.getElementById('select-level').value);
-        this.settings.count = parseInt(document.getElementById('select-count').value);
         localStorage.setItem('mathAppConfigs', JSON.stringify(this.settings));
+    },
+
+    goLevel() {
+        document.querySelectorAll('[data-lv]').forEach(b =>
+            b.classList.toggle('active', parseInt(b.dataset.lv) === this.settings.level));
+        this.switchView('view-level');
+    },
+
+    selectLevel(n) {
+        this.settings.level = n;
+        document.querySelectorAll('[data-lv]').forEach(b =>
+            b.classList.toggle('active', parseInt(b.dataset.lv) === n));
+    },
+
+    goCount() {
+        document.querySelectorAll('[data-cnt]').forEach(b =>
+            b.classList.toggle('active', parseInt(b.dataset.cnt) === this.settings.count));
+        this.switchView('view-count');
+    },
+
+    selectCount(n) {
+        this.settings.count = n;
+        document.querySelectorAll('[data-cnt]').forEach(b =>
+            b.classList.toggle('active', parseInt(b.dataset.cnt) === n));
+    },
+
+    goNext() {
+        document.getElementById('nextBtn').style.display = 'none';
+        this.nextQuestion();
     },
 
     switchView(viewId) {
@@ -82,7 +109,9 @@ const app = {
         this.state.combo = 0;
         this.state.roundCorrect = 0;
         this.state.roundResults = [];
+        this.saveSettings();
         document.getElementById('character-reaction').innerHTML = `<div class="character" id="game-char">${this.svg.dog}</div>`;
+        document.getElementById('nextBtn').style.display = 'none';
         this.switchView('view-game');
         this.nextQuestion();
     },
@@ -165,17 +194,15 @@ const app = {
                 localStorage.setItem('mathAppHighScore', this.state.maxCombo);
                 document.getElementById('high-score').textContent = `${this.state.maxCombo} かい`;
             }
-            setTimeout(() => {
-                charEl.classList.remove('jump');
-                this.nextQuestion();
-            }, 1200);
+            setTimeout(() => charEl.classList.remove('jump'), 1000);
         } else {
             this.playSound('wrong');
             this.speak("おしい！もういっかい！");
             this.state.combo = 0;
             charEl.innerHTML = this.svg.cat;
-            setTimeout(() => { charEl.innerHTML = this.svg.dog; this.nextQuestion(); }, 1200);
+            setTimeout(() => { charEl.innerHTML = this.svg.dog; }, 1000);
         }
+        setTimeout(() => { document.getElementById('nextBtn').style.display = 'block'; }, 600);
     },
 
     showResult() {
@@ -244,10 +271,6 @@ const app = {
 
     updateSettingsUI() {
         document.getElementById('btn-sound').textContent = this.settings.sound ? 'ON' : 'OFF';
-        const levelSel = document.getElementById('select-level');
-        const countSel = document.getElementById('select-count');
-        if (levelSel) levelSel.value = this.settings.level;
-        if (countSel) countSel.value = this.settings.count;
     },
 
     // 紙吹雪エフェクト (Canvas API)

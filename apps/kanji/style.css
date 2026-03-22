@@ -482,3 +482,29 @@ input:checked + .toggle-slider::before { transform: translateX(28px); }
    =========================== */
 ::-webkit-scrollbar { width:6px; }
 ::-webkit-scrollbar-thumb { background:rgba(0,0,0,0.15); border-radius:3px; }
+
+/* ===== COUNT SETUP SCREEN ===== */
+.setup-body {
+  display: flex; flex-direction: column; align-items: center;
+  justify-content: center; gap: 20px; padding: 40px 24px;
+  height: 100%;
+}
+.setup-title {
+  font-size: 24px; font-weight: 900; color: #FF6B9D; text-align: center;
+}
+.back-btn-large {
+  margin-top: 8px; padding: 12px 32px; border: 3px solid #ccc;
+  border-radius: 16px; background: white; font-family: inherit;
+  font-size: 17px; font-weight: 700; cursor: pointer; color: #555;
+}
+
+/* ===== NEXT BUTTON ===== */
+.next-btn-kanji {
+  display: block; margin: 12px auto 0;
+  padding: 18px 48px; border: none; border-radius: 28px;
+  background: linear-gradient(135deg, #4ECDC4, #00897b);
+  color: white; font-family: inherit; font-size: 22px; font-weight: 900;
+  cursor: pointer; box-shadow: 0 6px 0 #00695c;
+  transition: transform 0.1s, box-shadow 0.1s;
+}
+.next-btn-kanji:active { transform: translateY(3px); box-shadow: 0 3px 0 #00695c; }
