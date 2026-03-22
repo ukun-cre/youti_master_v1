@@ -89,40 +89,43 @@
     <div class="progress-fill" id="progress-fill"></div>
   </div>
 
-  <!-- 問題 -->
-  <div class="game-question-area">
-    <p class="game-question-text" id="game-question-text">もんだい</p>
-    <div class="game-animal-display" id="game-animal-display"></div>
-  </div>
+  <!-- ↓ここからスクロール可能エリア↓ -->
+  <div class="game-scroll-area">
 
-  <!-- 4択エリア -->
-  <div id="area-4choice" class="answer-area">
-    <div class="choices-grid" id="choices-grid"></div>
-  </div>
-
-  <!-- 入力エリア -->
-  <div id="area-input" class="answer-area" style="display:none">
-    <div class="numpad-display-box">
-      <div class="numpad-display-text" id="numpad-display">？</div>
-      <div class="numpad-unit">ひき</div>
+    <!-- 問題 -->
+    <div class="game-question-area">
+      <p class="game-question-text" id="game-question-text">もんだい</p>
+      <div class="game-animal-display" id="game-animal-display"></div>
     </div>
-    <div class="numpad-grid">
-      <button class="nb" onclick="numpadPress(7)">7</button>
-      <button class="nb" onclick="numpadPress(8)">8</button>
-      <button class="nb" onclick="numpadPress(9)">9</button>
-      <button class="nb" onclick="numpadPress(4)">4</button>
-      <button class="nb" onclick="numpadPress(5)">5</button>
-      <button class="nb" onclick="numpadPress(6)">6</button>
-      <button class="nb" onclick="numpadPress(1)">1</button>
-      <button class="nb" onclick="numpadPress(2)">2</button>
-      <button class="nb" onclick="numpadPress(3)">3</button>
-      <button class="nb nb-del" onclick="numpadDelete()">⌫</button>
-      <button class="nb" onclick="numpadPress(0)">0</button>
-      <button class="nb nb-ok" onclick="numpadConfirm()">OK</button>
-    </div>
-  </div>
 
-  <!-- 正解/不正解オーバーレイ -->
+    <!-- 4択エリア -->
+    <div id="area-4choice" class="answer-area">
+      <div class="choices-grid" id="choices-grid"></div>
+    </div>
+
+    <!-- 入力エリア -->
+    <div id="area-input" class="answer-area" style="display:none">
+      <div class="numpad-display-box">
+        <div class="numpad-display-text" id="numpad-display">？</div>
+        <div class="numpad-unit">ひき</div>
+      </div>
+      <div class="numpad-grid">
+        <button class="nb" onclick="numpadPress(7)">7</button>
+        <button class="nb" onclick="numpadPress(8)">8</button>
+        <button class="nb" onclick="numpadPress(9)">9</button>
+        <button class="nb" onclick="numpadPress(4)">4</button>
+        <button class="nb" onclick="numpadPress(5)">5</button>
+        <button class="nb" onclick="numpadPress(6)">6</button>
+        <button class="nb" onclick="numpadPress(1)">1</button>
+        <button class="nb" onclick="numpadPress(2)">2</button>
+        <button class="nb" onclick="numpadPress(3)">3</button>
+        <button class="nb nb-del" onclick="numpadDelete()">⌫</button>
+        <button class="nb" onclick="numpadPress(0)">0</button>
+        <button class="nb nb-ok" onclick="numpadConfirm()">OK ✓</button>
+      </div>
+    </div>
+
+  </div><!-- ↑スクロールエリア終わり↑ -->
   <div class="answer-overlay" id="answer-overlay" style="display:none">
     <div class="answer-overlay-card">
       <div class="answer-mark" id="answer-mark">○</div>

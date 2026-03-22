@@ -2,13 +2,108 @@
    どうぶつかぞえ - app.js
    ========================================== */
 
-// ===== 動物データ =====
+// ===== 動物データ (SVGイラスト) =====
 const ANIMALS = [
-  { name: 'ネコ',     emoji: '🐱', color: '#FF6B9D', bg: '#FFE5EF' },
-  { name: 'イヌ',     emoji: '🐶', color: '#FF8C42', bg: '#FFF0E5' },
-  { name: 'ハムスター', emoji: '🐹', color: '#D97706', bg: '#FFFBE5' },
-  { name: 'ゾウ',     emoji: '🐘', color: '#A855F7', bg: '#F5E5FF' },
-  { name: 'キリン',   emoji: '🦒', color: '#0D9488', bg: '#E5FFFD' },
+  {
+    name: 'ネコ', color: '#FF6B9D', bg: '#FFE5EF',
+    svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+      <polygon points="12,46 24,14 38,44" fill="#FFACC7"/>
+      <polygon points="62,44 76,14 88,46" fill="#FFACC7"/>
+      <polygon points="16,44 24,20 36,43" fill="#FF85A1"/>
+      <polygon points="64,43 76,20 84,44" fill="#FF85A1"/>
+      <circle cx="50" cy="58" r="35" fill="#FFD4E8"/>
+      <ellipse cx="36" cy="54" rx="7" ry="8" fill="#222"/>
+      <ellipse cx="64" cy="54" rx="7" ry="8" fill="#222"/>
+      <circle cx="38" cy="51" r="2.5" fill="white"/>
+      <circle cx="66" cy="51" r="2.5" fill="white"/>
+      <ellipse cx="50" cy="65" rx="4" ry="3" fill="#FF85A1"/>
+      <path d="M43,71 Q50,77 57,71" stroke="#FF85A1" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+      <line x1="5" y1="61" x2="36" y2="65" stroke="#ddd" stroke-width="2"/>
+      <line x1="5" y1="69" x2="36" y2="69" stroke="#ddd" stroke-width="2"/>
+      <line x1="64" y1="65" x2="95" y2="61" stroke="#ddd" stroke-width="2"/>
+      <line x1="64" y1="69" x2="95" y2="69" stroke="#ddd" stroke-width="2"/>
+    </svg>`,
+  },
+  {
+    name: 'イヌ', color: '#FF8C42', bg: '#FFF0E5',
+    svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+      <ellipse cx="17" cy="52" rx="15" ry="23" fill="#C97D1A" transform="rotate(-18,17,52)"/>
+      <ellipse cx="83" cy="52" rx="15" ry="23" fill="#C97D1A" transform="rotate(18,83,52)"/>
+      <circle cx="50" cy="50" r="33" fill="#F5B942"/>
+      <ellipse cx="50" cy="62" rx="15" ry="11" fill="#F5DC80"/>
+      <ellipse cx="50" cy="57" rx="8" ry="6" fill="#444"/>
+      <circle cx="48" cy="55.5" r="2" fill="#666"/>
+      <circle cx="37" cy="44" r="6.5" fill="#4a3010"/>
+      <circle cx="63" cy="44" r="6.5" fill="#4a3010"/>
+      <circle cx="38.5" cy="41.5" r="2.5" fill="white"/>
+      <circle cx="64.5" cy="41.5" r="2.5" fill="white"/>
+      <path d="M40,70 Q50,78 60,70" stroke="#b06820" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+      <ellipse cx="37" cy="82" rx="7" ry="5" fill="#FF6B9D" opacity="0.5"/>
+      <ellipse cx="63" cy="82" rx="7" ry="5" fill="#FF6B9D" opacity="0.5"/>
+    </svg>`,
+  },
+  {
+    name: 'ハムスター', color: '#D97706', bg: '#FFFBE5',
+    svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+      <circle cx="22" cy="20" r="16" fill="#FFD4A0"/>
+      <circle cx="78" cy="20" r="16" fill="#FFD4A0"/>
+      <circle cx="22" cy="20" r="9" fill="#FFB6C1"/>
+      <circle cx="78" cy="20" r="9" fill="#FFB6C1"/>
+      <ellipse cx="14" cy="64" rx="15" ry="12" fill="#FFE5B4"/>
+      <ellipse cx="86" cy="64" rx="15" ry="12" fill="#FFE5B4"/>
+      <ellipse cx="50" cy="58" rx="34" ry="30" fill="#FFEAA0"/>
+      <circle cx="38" cy="50" r="7" fill="#222"/>
+      <circle cx="62" cy="50" r="7" fill="#222"/>
+      <circle cx="40" cy="47" r="2.5" fill="white"/>
+      <circle cx="64" cy="47" r="2.5" fill="white"/>
+      <ellipse cx="50" cy="62" rx="4" ry="3.5" fill="#FF9EC1"/>
+      <path d="M44,68 Q50,74 56,68" stroke="#FF9EC1" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+      <line x1="22" y1="64" x2="40" y2="66" stroke="#ddd" stroke-width="1.5"/>
+      <line x1="22" y1="70" x2="40" y2="70" stroke="#ddd" stroke-width="1.5"/>
+      <line x1="60" y1="66" x2="78" y2="64" stroke="#ddd" stroke-width="1.5"/>
+      <line x1="60" y1="70" x2="78" y2="70" stroke="#ddd" stroke-width="1.5"/>
+    </svg>`,
+  },
+  {
+    name: 'ゾウ', color: '#A855F7', bg: '#F5E5FF',
+    svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+      <ellipse cx="9" cy="44" rx="14" ry="24" fill="#C084FC"/>
+      <ellipse cx="91" cy="44" rx="14" ry="24" fill="#C084FC"/>
+      <ellipse cx="9" cy="44" rx="8" ry="16" fill="#DDD6FE"/>
+      <ellipse cx="91" cy="44" rx="8" ry="16" fill="#DDD6FE"/>
+      <circle cx="50" cy="42" r="30" fill="#E9D5FF"/>
+      <path d="M34,63 Q23,79 28,91 Q34,98 40,88 Q42,78 36,70" stroke="#C084FC" stroke-width="10" fill="none" stroke-linecap="round"/>
+      <circle cx="36" cy="33" r="6" fill="#333"/>
+      <circle cx="64" cy="33" r="6" fill="#333"/>
+      <circle cx="37.5" cy="30.5" r="2.5" fill="white"/>
+      <circle cx="65.5" cy="30.5" r="2.5" fill="white"/>
+      <path d="M40,52 Q50,58 60,52" stroke="#C084FC" stroke-width="2" fill="none" stroke-linecap="round"/>
+      <ellipse cx="36" cy="82" rx="6" ry="4" fill="#FF6B9D" opacity="0.4"/>
+      <ellipse cx="64" cy="82" rx="6" ry="4" fill="#FF6B9D" opacity="0.4"/>
+    </svg>`,
+  },
+  {
+    name: 'キリン', color: '#0D9488', bg: '#E5FFFD',
+    svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+      <rect x="32" y="1" width="8" height="16" rx="4" fill="#78716C"/>
+      <rect x="60" y="1" width="8" height="16" rx="4" fill="#78716C"/>
+      <circle cx="36" cy="1" r="5.5" fill="#78716C"/>
+      <circle cx="64" cy="1" r="5.5" fill="#78716C"/>
+      <ellipse cx="50" cy="58" rx="29" ry="35" fill="#FDE68A"/>
+      <ellipse cx="26" cy="40" rx="8" ry="6" fill="#92400E" opacity="0.5"/>
+      <ellipse cx="70" cy="35" rx="6" ry="8" fill="#92400E" opacity="0.5"/>
+      <ellipse cx="32" cy="62" rx="7" ry="5" fill="#92400E" opacity="0.5"/>
+      <ellipse cx="68" cy="66" rx="6" ry="7" fill="#92400E" opacity="0.5"/>
+      <ellipse cx="52" cy="28" rx="5" ry="6" fill="#92400E" opacity="0.5"/>
+      <ellipse cx="36" cy="30" rx="6" ry="5" fill="#222"/>
+      <ellipse cx="64" cy="30" rx="6" ry="5" fill="#222"/>
+      <circle cx="37.5" cy="27.5" r="2.5" fill="white"/>
+      <circle cx="65.5" cy="27.5" r="2.5" fill="white"/>
+      <circle cx="43" cy="73" r="3.5" fill="#B45309"/>
+      <circle cx="57" cy="73" r="3.5" fill="#B45309"/>
+      <path d="M40,80 Q50,87 60,80" stroke="#B45309" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+    </svg>`,
+  },
 ];
 
 // ===== 状態 =====
@@ -68,7 +163,7 @@ function makeQuestion() {
     const a2     = pickAnimal(a1);
     return {
       type: 'add', a, b, answer, animal1: a1, animal2: a2,
-      formula:       `${a1.emoji} ${a} ＋ ${a2.emoji} ${b} ＝ ${answer}`,
+      formula:       `${a1.name} ${a} ＋ ${a2.name} ${b} ＝ ${answer}`,
       formulaSpeech: `${a}たす${b}は${answer}`,
       questionText:  `${a1.name}が ${a}ひき、${a2.name}が ${b}ひきいます。\nあわせて なんひきですか？`,
       speechText:    `${a1.name}が${a}ひき、${a2.name}が${b}ひき。あわせて なんひきですか？`,
@@ -80,7 +175,7 @@ function makeQuestion() {
     const a1      = pickAnimal(null);
     return {
       type: 'sub', a: total, b: removed, answer, animal1: a1,
-      formula:       `${a1.emoji} ${total} ー ${removed} ＝ ${answer}`,
+      formula:       `${a1.name} ${total} ー ${removed} ＝ ${answer}`,
       formulaSpeech: `${total}ひく${removed}は${answer}`,
       questionText:  `${a1.name}が ${total}ひきいます。\n${removed}ひきかえりました。のこりは なんひきですか？`,
       speechText:    `${a1.name}が${total}ひき。${removed}ひきかえりました。のこりはなんひきですか？`,
@@ -179,7 +274,7 @@ function makeAnimalGroup(animal, count) {
   for (let i = 0; i < count; i++) {
     const s = document.createElement('span');
     s.className = 'ag-emoji';
-    s.textContent = animal.emoji;
+    s.innerHTML = animal.svg;  // SVGイラストを使用
     grid.appendChild(s);
   }
 
@@ -210,13 +305,13 @@ function makeSubGroup(animal, total, leaving) {
   for (let i = 0; i < total; i++) {
     const s = document.createElement('span');
     s.className = 'ag-emoji' + (i >= staying ? ' leaving' : '');
-    s.textContent = animal.emoji;
+    s.innerHTML = animal.svg;  // SVGイラストを使用
     grid.appendChild(s);
   }
 
   const note = document.createElement('div');
   note.className = 'ag-leaving-note';
-  note.textContent = `${animal.emoji} ${leaving}ひき かえった 👋`;
+  note.textContent = `${animal.name} ${leaving}ひき かえった 👋`;
 
   div.appendChild(lbl);
   div.appendChild(grid);
@@ -532,13 +627,14 @@ const Fireworks = (() => {
   return { fire, stop };
 })();
 
-// ===== メニュー動物アニメ =====
+// ===== メニュー動物アニメ (SVG) =====
 function initMenuAnimals() {
   const row = document.getElementById('menu-animals');
-  ANIMALS.forEach(a => {
+  ANIMALS.forEach((a, i) => {
     const s = document.createElement('span');
-    s.className   = 'menu-animal';
-    s.textContent = a.emoji;
+    s.className = 'menu-animal';
+    s.innerHTML = a.svg;
+    s.style.animationDelay = (i * 0.3) + 's';
     row.appendChild(s);
   });
 }
