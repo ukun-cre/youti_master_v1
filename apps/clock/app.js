@@ -44,9 +44,12 @@ const app = {
     this.switchView('view-settings');
     // ラジオ初期化
     document.getElementById('radio-' + state.style).checked = true;
-    document.querySelectorAll('[name="style"]').forEach(r =>
-      r.addEventListener('change', e => { state.style = e.target.value; })
-    );
+    // カウントボタン初期化
+    document.querySelectorAll('.btn-count').forEach(b => b.classList.remove('active'));
+    const countBtn = document.getElementById('count-' + state.count);
+    if (countBtn) countBtn.classList.add('active');
+    // レベルリスト描画
+    this._renderLevelListInSettings();
   },
 
   toggleSound() {
@@ -60,7 +63,32 @@ const app = {
     document.getElementById('count-' + n).classList.add('active');
   },
 
-  // ---------- レベル選択 ----------
+  // ---------- レベル選択（設定画面内） ----------
+  _renderLevelListInSettings() {
+    const records = this._loadRecords();
+    const list = document.getElementById('level-list-settings');
+    if (!list) return;
+    list.innerHTML = '';
+    LEVELS.forEach(lv => {
+      const rec = records[lv.id] || {};
+      const stars = rec.bestStars ? '⭐'.repeat(rec.bestStars) : '－';
+      const btn = document.createElement('button');
+      btn.className = 'level-btn' + (state.level.id === lv.id ? ' selected' : '');
+      btn.innerHTML = `
+        <span class="lv-num">Lv${lv.id}</span>
+        <span><div class="lv-name">${lv.name}</div><div class="lv-desc">${lv.desc}</div></span>
+        <span class="level-stars">${stars}</span>
+      `;
+      btn.onclick = () => {
+        state.level = lv;
+        list.querySelectorAll('.level-btn').forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+      };
+      list.appendChild(btn);
+    });
+  },
+
+  // ---------- レベル選択（独立画面） ----------
   renderLevelList() {
     const records = this._loadRecords();
     const list = document.getElementById('level-list');
@@ -92,6 +120,8 @@ const app = {
     state.combo = 0;
     state.questions = this._generateQuestions();
     this.switchView('view-game');
+    const nextBtn = document.getElementById('btn-next');
+    if (nextBtn) nextBtn.classList.add('hidden');
     this._renderClockFace('clock-ticks', 'clock-numbers');
     this._renderClockFace('clock2-ticks', 'clock2-numbers');
     this._renderClockFace('clock3-ticks', 'clock3-numbers');
@@ -293,6 +323,7 @@ const app = {
       const btn = document.createElement('button');
       btn.className = 'btn-choice';
       btn.textContent = c.label;
+      btn._answerValue = c.value;
       btn.onclick = () => this._checkChoice(btn, c.value, correct, el);
       el.appendChild(btn);
     });
@@ -360,10 +391,7 @@ const app = {
 
     const isCorrect = this._isCorrect(value, correct);
     // 全ボタン無効化
-    container.querySelectorAll('.btn-choice').forEach(b => {
-      b.onclick = null;
-      const v = b._value;
-    });
+    container.querySelectorAll('.btn-choice').forEach(b => { b.onclick = null; });
 
     if (isCorrect) {
       btn.classList.add('correct');
@@ -372,12 +400,12 @@ const app = {
       btn.classList.add('wrong');
       // 正解を緑に
       container.querySelectorAll('.btn-choice').forEach(b => {
-        if (this._isCorrect(b._answerValue, correct)) b.classList.add('correct');
+        if (b._answerValue && this._isCorrect(b._answerValue, correct)) b.classList.add('correct');
       });
       this._onWrong();
     }
 
-    setTimeout(() => this._nextOrResult(), 1200);
+    this._showNextButton();
   },
 
   _isCorrect(value, correct) {
@@ -456,7 +484,7 @@ const app = {
     } else {
       this._onWrong();
     }
-    setTimeout(() => this._nextOrResult(), 1300);
+    this._showNextButton();
   },
 
   _updateInputDisplay() {
@@ -500,6 +528,21 @@ const app = {
     el.textContent = msgs[Math.floor(Math.random()*msgs.length)];
     if (bonus > 0) el.textContent += ` +${bonus}ボーナス！`;
     el.classList.remove('hidden');
+  },
+
+  // ---------- 次へボタン ----------
+  _showNextButton() {
+    const btn = document.getElementById('btn-next');
+    if (!btn) return;
+    const isLast = state.questionIndex >= state.count - 1;
+    btn.textContent = isLast ? 'けっかをみる！🎉' : 'つぎへ →';
+    btn.classList.remove('hidden');
+  },
+
+  nextQuestion() {
+    const btn = document.getElementById('btn-next');
+    if (btn) btn.classList.add('hidden');
+    this._nextOrResult();
   },
 
   _nextOrResult() {
@@ -683,13 +726,12 @@ const app = {
     this._renderOwl('result-owl');
     this.renderLevelList();
 
-    // レベル選択ボタンからレベル設定を反映
     document.getElementById('btn-sound').textContent = state.sound ? 'ON' : 'OFF';
 
-    // 記録ボタン
-    document.querySelectorAll('[onclick*="view-records"]').forEach(b => {
-      b.addEventListener('click', () => this.renderRecords());
-    });
+    // ラジオボタンのイベントリスナー（1度だけ登録）
+    document.querySelectorAll('[name="style"]').forEach(r =>
+      r.addEventListener('change', e => { state.style = e.target.value; })
+    );
   },
 };
 
