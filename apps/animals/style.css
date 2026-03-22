@@ -157,13 +157,15 @@ html, body {
    =========================== */
 #screen-game {
   background: linear-gradient(160deg, #E8F5FF 0%, #F3E8FF 60%, #FFF8E1 100%);
-  padding: 0; position: relative; overflow: hidden;
+  padding: 0; position: relative;
+  /* overflow は .screen の overflow-y:auto に任せる */
 }
 
 .game-topbar {
+  position: sticky; top: 0; z-index: 50;
   display: flex; align-items: center; justify-content: space-between;
   padding: 52px 16px 12px;
-  background: rgba(255,255,255,0.88);
+  background: rgba(255,255,255,0.92);
   backdrop-filter: blur(10px);
   border-bottom: 2px solid rgba(0,0,0,0.06);
 }
@@ -178,7 +180,10 @@ html, body {
 .game-prog-text { font-size: clamp(16px, 4vw, 20px); font-weight: 900; color: #666; }
 .game-score-text { font-size: clamp(16px, 4vw, 20px); font-weight: 900; color: var(--orange); }
 
-.progress-wrap { height: 8px; background: rgba(0,0,0,0.08); }
+.progress-wrap {
+  position: sticky; top: 104px; z-index: 49; /* topbar の高さ分だけ下に sticky */
+  height: 8px; background: rgba(0,0,0,0.08);
+}
 .progress-fill {
   height: 100%; width: 0%;
   background: linear-gradient(90deg, #FF6B9D, #A855F7, #5B8DEF);
@@ -191,35 +196,45 @@ html, body {
   font-size: clamp(14px, 3.5vw, 17px); font-weight: 700; color: #333;
   text-align: center; background: white; border-radius: 16px;
   padding: 11px 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-  line-height: 1.5;
+  line-height: 1.6; white-space: pre-line;
 }
 
 .game-animal-display {
+  display: flex; flex-direction: column; align-items: center;
+  gap: 8px; padding: 12px 8px; min-height: 100px;
+}
+
+/* 式の上段（動物グループ + 演算子） */
+.formula-top {
   display: flex; align-items: center; justify-content: center;
-  flex-wrap: wrap; gap: 8px;
-  padding: 12px 8px; min-height: 110px;
+  gap: 8px; flex-wrap: wrap;
+}
+
+/* 式の下段（＝ ？） */
+.formula-bottom {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
 }
 
 /* 動物グループ */
 .animal-group {
   background: var(--ab, #fff);
   border: 3px solid var(--ac, #ccc);
-  border-radius: 20px; padding: 10px 12px;
-  text-align: center; min-width: 72px;
+  border-radius: 18px; padding: 8px 10px;
+  text-align: center; min-width: 68px; max-width: 48vw;
   box-shadow: 0 4px 14px rgba(0,0,0,0.12);
 }
 
 .ag-label {
   font-size: 11px; font-weight: 900; color: var(--ac, #999);
-  margin-bottom: 5px; letter-spacing: 0.5px;
+  margin-bottom: 4px; letter-spacing: 0.5px;
 }
 
 .ag-emoji-grid {
   display: flex; flex-wrap: wrap; justify-content: center;
-  gap: 2px; max-width: 170px; font-size: 26px;
+  gap: 1px; max-width: clamp(100px, 40vw, 160px); font-size: clamp(20px, 5.5vw, 26px);
 }
-.ag-emoji-grid.medium { font-size: 20px; max-width: 140px; }
-.ag-emoji-grid.small  { font-size: 16px; max-width: 130px; }
+.ag-emoji-grid.medium { font-size: clamp(16px, 4.5vw, 20px); max-width: clamp(90px, 38vw, 140px); }
+.ag-emoji-grid.small  { font-size: clamp(13px, 3.5vw, 16px); max-width: clamp(80px, 35vw, 130px); }
 
 .ag-emoji { line-height: 1.1; }
 .ag-emoji.leaving {
@@ -309,7 +324,8 @@ html, body {
 
 /* ===== 入力式 ===== */
 #area-input {
-  flex-direction: column; align-items: center; gap: 12px; padding: 0 16px 16px;
+  flex-direction: column; align-items: center; gap: 12px;
+  padding: 0 16px 40px; /* 下余白でOKボタンが確実に見える */
 }
 
 .numpad-display-box {
@@ -350,10 +366,10 @@ html, body {
 
 /* ===== 正解/不正解オーバーレイ ===== */
 .answer-overlay {
-  position: absolute; inset: 0;
+  position: fixed; inset: 0;          /* スクロールに関わらず全画面を覆う */
   background: rgba(255,255,255,0.96); backdrop-filter: blur(10px);
   display: flex; align-items: center; justify-content: center;
-  z-index: 100; animation: overlayIn 0.3s cubic-bezier(0.175,0.885,0.32,1.275);
+  z-index: 200; animation: overlayIn 0.3s cubic-bezier(0.175,0.885,0.32,1.275);
 }
 @keyframes overlayIn {
   from { opacity: 0; transform: scale(0.9); }

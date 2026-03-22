@@ -68,9 +68,10 @@ function makeQuestion() {
     const a2     = pickAnimal(a1);
     return {
       type: 'add', a, b, answer, animal1: a1, animal2: a2,
-      formula:      `${a1.emoji} ${a} ＋ ${a2.emoji} ${b} ＝ ${answer}`,
-      questionText: `${a1.name}が ${a}ひき、${a2.name}が ${b}ひきいます。\nあわせて なんひきですか？`,
-      speechText:   `${a1.name}が${a}ひき、${a2.name}が${b}ひき。あわせて なんひきですか？`,
+      formula:       `${a1.emoji} ${a} ＋ ${a2.emoji} ${b} ＝ ${answer}`,
+      formulaSpeech: `${a}たす${b}は${answer}`,
+      questionText:  `${a1.name}が ${a}ひき、${a2.name}が ${b}ひきいます。\nあわせて なんひきですか？`,
+      speechText:    `${a1.name}が${a}ひき、${a2.name}が${b}ひき。あわせて なんひきですか？`,
     };
   } else {
     const total   = Math.floor(Math.random() * (max - 1)) + 2;  // 2..max
@@ -79,9 +80,10 @@ function makeQuestion() {
     const a1      = pickAnimal(null);
     return {
       type: 'sub', a: total, b: removed, answer, animal1: a1,
-      formula:      `${a1.emoji} ${total} ー ${removed} ＝ ${answer}`,
-      questionText: `${a1.name}が ${total}ひきいます。\n${removed}ひきかえりました。のこりは なんひきですか？`,
-      speechText:   `${a1.name}が${total}ひき。${removed}ひきかえりました。のこりはなんひきですか？`,
+      formula:       `${a1.emoji} ${total} ー ${removed} ＝ ${answer}`,
+      formulaSpeech: `${total}ひく${removed}は${answer}`,
+      questionText:  `${a1.name}が ${total}ひきいます。\n${removed}ひきかえりました。のこりは なんひきですか？`,
+      speechText:    `${a1.name}が${total}ひき。${removed}ひきかえりました。のこりはなんひきですか？`,
     };
   }
 }
@@ -141,16 +143,24 @@ function renderAnimalDisplay(q) {
   const c = document.getElementById('game-animal-display');
   c.innerHTML = '';
 
+  const top = document.createElement('div');
+  top.className = 'formula-top';
+  const bottom = document.createElement('div');
+  bottom.className = 'formula-bottom';
+
   if (q.type === 'add') {
-    c.appendChild(makeAnimalGroup(q.animal1, q.a));
-    c.appendChild(makeOpEl('＋'));
-    c.appendChild(makeAnimalGroup(q.animal2, q.b));
-    c.appendChild(makeOpEl('＝'));
+    top.appendChild(makeAnimalGroup(q.animal1, q.a));
+    top.appendChild(makeOpEl('＋'));
+    top.appendChild(makeAnimalGroup(q.animal2, q.b));
   } else {
-    c.appendChild(makeSubGroup(q.animal1, q.a, q.b));
-    c.appendChild(makeOpEl('＝'));
+    top.appendChild(makeSubGroup(q.animal1, q.a, q.b));
   }
-  c.appendChild(makeQMark());
+
+  bottom.appendChild(makeOpEl('＝'));
+  bottom.appendChild(makeQMark());
+
+  c.appendChild(top);
+  c.appendChild(bottom);
 }
 
 function makeAnimalGroup(animal, count) {
@@ -316,11 +326,7 @@ function showAnswerResult(isOK, q) {
 
   overlay.style.display = 'flex';
 
-  const readFormula = q.formula
-    .replace('＋', 'たす')
-    .replace('ー', 'ひく')
-    .replace('＝', 'は');
-  speak(isOK ? 'せいかい！' + readFormula : 'ざんねん。' + readFormula);
+  speak(isOK ? 'せいかい！' + q.formulaSpeech : 'ざんねん。' + q.formulaSpeech);
 }
 
 // ===== 次の問題 =====
