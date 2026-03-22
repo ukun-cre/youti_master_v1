@@ -637,6 +637,53 @@ const KANJI_DATA = [
 })();
 
 /* =========================================
+   小学2年生 漢字 160字  全データ
+   ========================================= */
+const KANJI_DATA_2 = (function(){
+  const d = [
+    ['引','ひく','🪝'],['羽','はね','🦋'],['雲','くも','☁️'],['園','えん','🌸'],['遠','とおい','🔭'],
+    ['何','なに','❓'],['科','か','🔬'],['夏','なつ','🌻'],['家','いえ','🏠'],['歌','うた','🎵'],
+    ['画','え','🖼️'],['回','まわる','🔄'],['会','あう','🤝'],['海','うみ','🌊'],['絵','え','🎨'],
+    ['外','そと','🚪'],['角','かど','📐'],['楽','たのしい','🎶'],['活','かつ','💪'],['間','あいだ','↔️'],
+    ['丸','まる','⭕'],['岩','いわ','🪨'],['顔','かお','😊'],['汽','き','🚂'],['記','き','✏️'],
+    ['帰','かえる','🏡'],['弓','ゆみ','🏹'],['牛','うし','🐄'],['魚','さかな','🐟'],['京','きょう','🏯'],
+    ['強','つよい','💪'],['教','おしえる','📚'],['近','ちかい','📌'],['兄','あに','👦'],['形','かたち','🔷'],
+    ['計','はかる','⏱️'],['元','もと','⚡'],['言','いう','💬'],['原','はら','🌾'],['戸','と','🚪'],
+    ['古','ふるい','🏺'],['午','うま','🕛'],['後','あと','⬅️'],['語','かたる','💬'],['工','こう','🔨'],
+    ['公','こう','🏛️'],['広','ひろい','📐'],['交','こう','✖️'],['光','ひかり','💡'],['考','かんがえる','🤔'],
+    ['行','いく','🚶'],['高','たかい','🏔️'],['合','あう','🔗'],['国','くに','🌏'],['黒','くろ','⬛'],
+    ['今','いま','⏰'],['才','さい','🌟'],['細','こまかい','🧵'],['作','つくる','🛠️'],['算','さん','🔢'],
+    ['止','とまる','✋'],['市','いち','🏙️'],['矢','や','🏹'],['姉','あね','👧'],['思','おもう','💭'],
+    ['紙','かみ','📄'],['寺','てら','⛩️'],['自','じぶん','🙋'],['時','とき','⏰'],['室','しつ','🏠'],
+    ['社','しゃ','🏢'],['弱','よわい','🍃'],['首','くび','🦒'],['秋','あき','🍂'],['週','しゅう','📅'],
+    ['春','はる','🌸'],['書','かく','✏️'],['少','すくない','🔢'],['場','ば','📍'],['色','いろ','🎨'],
+    ['食','たべる','🍴'],['心','こころ','❤️'],['新','あたらしい','✨'],['親','おや','👨‍👩‍👧'],['図','ず','🗺️'],
+    ['数','かず','🔢'],['西','にし','🧭'],['声','こえ','🔊'],['星','ほし','⭐'],['晴','はれる','☀️'],
+    ['切','きる','✂️'],['雪','ゆき','❄️'],['船','ふね','⛵'],['線','せん','📏'],['前','まえ','👆'],
+    ['組','くみ','🔗'],['走','はしる','🏃'],['多','おおい','📊'],['太','ふとい','⚡'],['体','からだ','🧑'],
+    ['台','だい','🖥️'],['地','ち','🌍'],['池','いけ','🏞️'],['知','しる','💡'],['茶','ちゃ','🍵'],
+    ['昼','ひる','☀️'],['長','ながい','📏'],['鳥','とり','🐦'],['朝','あさ','🌅'],['直','なおる','📐'],
+    ['通','とおる','🚶'],['弟','おとうと','👦'],['店','みせ','🏪'],['点','てん','📍'],['電','でん','⚡'],
+    ['刀','かたな','🗡️'],['冬','ふゆ','❄️'],['当','あたる','🎯'],['東','ひがし','🧭'],['答','こたえ','💡'],
+    ['頭','あたま','🧠'],['同','おなじ','🟰'],['道','みち','🛣️'],['読','よむ','📖'],['内','うち','📦'],
+    ['南','みなみ','🧭'],['肉','にく','🥩'],['馬','うま','🐴'],['売','うる','🏷️'],['買','かう','🛒'],
+    ['麦','むぎ','🌾'],['半','はん','🔄'],['番','ばん','🔢'],['父','ちち','👨'],['風','かぜ','💨'],
+    ['分','わかる','➗'],['聞','きく','👂'],['米','こめ','🌾'],['歩','あるく','🚶'],['母','はは','👩'],
+    ['方','ほう','📐'],['北','きた','🧭'],['毎','まい','📅'],['妹','いもうと','👧'],['万','まん','💰'],
+    ['明','あかるい','💡'],['鳴','なく','🔔'],['毛','け','🐑'],['門','もん','🚪'],['夜','よる','🌙'],
+    ['野','の','🌾'],['友','ともだち','👫'],['用','よう','🔧'],['曜','よう','📅'],['来','くる','🚶'],
+    ['里','さと','🌾'],['理','り','💡'],['話','はなす','💬'],
+  ];
+  const bgs=['#FFF8F0','#E8F5E9','#E3F2FD','#FCE4EC','#F3E5F5','#FFF3E0','#E0F7FA','#FFF8E1'];
+  return d.map(([k,r,e],i)=>({
+    kanji:k, reading:r,
+    illust:svgWrap(bgs[i%bgs.length],`${em(e,'50','46','52')}${lbl(r,'#555')}`),
+    speech:`${r}。${k}という漢字を覚えましょう！`,
+    questionSpeech:`${r}という漢字はどれかな？`
+  }));
+})();
+
+/* =========================================
    不足分を自動補完（残りの小1漢字）
    ========================================= */
 const SUPPLEMENT = [
@@ -666,20 +713,23 @@ const SUPPLEMENT = [
    APP STATE
    =========================== */
 const State={
-  sound:false, questionCount:5,
+  sound:false, questionCount:5, grade:1,
   deckPool:[], wrongQueue:[], deckMode:'normal',
   currentKanjiSet:[], questionQueue:[], currentQ:null,
   score:0, combo:0, maxCombo:0, totalQuestions:5, answered:0, results:[],
   learnedKanji:new Set(), bestStreak:0, totalCorrect:0, totalGames:0,
+  learnedKanji2:new Set(), bestStreak2:0, totalCorrect2:0, totalGames2:0,
 };
 
 /* ===========================
    DECK MANAGER
    =========================== */
 const DeckManager={
+  _key(){ return State.grade===2?'kanjiDeck2':'kanjiDeck'; },
+  _data(){ return State.grade===2?KANJI_DATA_2:KANJI_DATA; },
   init(){
     try{
-      const d=JSON.parse(localStorage.getItem('kanjiDeck')||'null');
+      const d=JSON.parse(localStorage.getItem(this._key())||'null');
       if(d && Array.isArray(d.pool)){
         State.deckPool=[...d.pool]; State.wrongQueue=[...d.wrongQueue]; State.deckMode=d.mode||'normal'; return;
       }
@@ -687,12 +737,13 @@ const DeckManager={
     this._reset();
   },
   _reset(){
-    const idx=KANJI_DATA.map((_,i)=>i);
+    const data=this._data();
+    const idx=data.map((_,i)=>i);
     for(let i=idx.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[idx[i],idx[j]]=[idx[j],idx[i]];}
     State.deckPool=[...idx]; State.wrongQueue=[]; State.deckMode='normal'; this._save();
   },
   _save(){
-    try{localStorage.setItem('kanjiDeck',JSON.stringify({pool:State.deckPool,wrongQueue:State.wrongQueue,mode:State.deckMode}));}catch(e){}
+    try{localStorage.setItem(this._key(),JSON.stringify({pool:State.deckPool,wrongQueue:State.wrongQueue,mode:State.deckMode}));}catch(e){}
   },
   nextBatch(n){
     if(State.deckPool.length===0){
@@ -700,13 +751,15 @@ const DeckManager={
         State.deckMode='review'; State.deckPool=[...State.wrongQueue]; State.wrongQueue=[]; this._save();
       } else { this._reset(); }
     }
+    const data=this._data();
     const batch=State.deckPool.splice(0,Math.min(n,State.deckPool.length));
     this._save();
-    return batch.map(i=>KANJI_DATA[i]);
+    return batch.map(i=>data[i]);
   },
   markWrong(kanji){
     if(State.deckMode!=='review'){
-      const idx=KANJI_DATA.findIndex(k=>k.kanji===kanji);
+      const data=this._data();
+      const idx=data.findIndex(k=>k.kanji===kanji);
       if(idx>=0&&!State.wrongQueue.includes(idx)){State.wrongQueue.push(idx); this._save();}
     }
   },
@@ -718,20 +771,27 @@ const DeckManager={
 const Store={
   save(){
     try{ localStorage.setItem('kanjiApp',JSON.stringify({
-      sound:State.sound, questionCount:State.questionCount, bestStreak:State.bestStreak,
-      totalCorrect:State.totalCorrect, totalGames:State.totalGames,
+      sound:State.sound, questionCount:State.questionCount, grade:State.grade,
+      bestStreak:State.bestStreak, totalCorrect:State.totalCorrect, totalGames:State.totalGames,
       learnedKanji:[...State.learnedKanji],
+      bestStreak2:State.bestStreak2, totalCorrect2:State.totalCorrect2, totalGames2:State.totalGames2,
+      learnedKanji2:[...State.learnedKanji2],
     }));}catch(e){}
   },
   load(){
     try{
       const d=JSON.parse(localStorage.getItem('kanjiApp')||'{}');
-      if(d.sound!==undefined) State.sound=d.sound;
-      if(d.questionCount)     State.questionCount=d.questionCount;
-      if(d.bestStreak)        State.bestStreak=d.bestStreak;
-      if(d.totalCorrect)      State.totalCorrect=d.totalCorrect;
-      if(d.totalGames)        State.totalGames=d.totalGames;
-      if(d.learnedKanji)      State.learnedKanji=new Set(d.learnedKanji);
+      if(d.sound!==undefined)   State.sound=d.sound;
+      if(d.questionCount)       State.questionCount=d.questionCount;
+      if(d.grade)               State.grade=d.grade;
+      if(d.bestStreak)          State.bestStreak=d.bestStreak;
+      if(d.totalCorrect)        State.totalCorrect=d.totalCorrect;
+      if(d.totalGames)          State.totalGames=d.totalGames;
+      if(d.learnedKanji)        State.learnedKanji=new Set(d.learnedKanji);
+      if(d.bestStreak2)         State.bestStreak2=d.bestStreak2;
+      if(d.totalCorrect2)       State.totalCorrect2=d.totalCorrect2;
+      if(d.totalGames2)         State.totalGames2=d.totalGames2;
+      if(d.learnedKanji2)       State.learnedKanji2=new Set(d.learnedKanji2);
     }catch(e){}
   },
 };
@@ -818,7 +878,7 @@ const App={
     if(el) el.classList.add('active');
     if(name==='records')  this.renderRecords();
     if(name==='settings') this.renderSettings();
-    if(name==='menu')     this.menuVoice();
+    if(name==='menu'){    this.menuVoice(); this._updateGradeDisplay(); }
   },
   menuVoice(){ setTimeout(()=>Speech.say('かんじだいすき！いっしょにかんじをおぼえよう！'),400); },
 
@@ -834,22 +894,35 @@ const App={
   saveSettings(){ Store.save(); Speech.say('ほぞんしました！'); setTimeout(()=>this.showScreen('menu'),800); },
 
   renderRecords(){
-    document.getElementById('recordNumber').textContent=State.bestStreak;
-    document.getElementById('totalCorrect').textContent=State.totalCorrect;
-    document.getElementById('totalGames').textContent=State.totalGames;
-    document.getElementById('learnedKanji').textContent=State.learnedKanji.size;
-    document.getElementById('trophyIcon').textContent=State.bestStreak>=10?'🏆':State.bestStreak>=5?'🥈':'🥉';
+    const is2=State.grade===2;
+    const streak=is2?State.bestStreak2:State.bestStreak;
+    const correct=is2?State.totalCorrect2:State.totalCorrect;
+    const games=is2?State.totalGames2:State.totalGames;
+    const learned=is2?State.learnedKanji2:State.learnedKanji;
+    const total=is2?160:80;
+    document.getElementById('recordNumber').textContent=streak;
+    document.getElementById('totalCorrect').textContent=correct;
+    document.getElementById('totalGames').textContent=games;
+    document.getElementById('learnedKanji').textContent=`${learned.size} / ${total}`;
+    document.getElementById('trophyIcon').textContent=streak>=10?'🏆':streak>=5?'🥈':'🥉';
     const wrap=document.getElementById('learnedKanjiDisplay');
     wrap.innerHTML='';
-    [...State.learnedKanji].forEach(k=>{ const b=document.createElement('div'); b.className='learned-kanji-badge'; b.textContent=k; wrap.appendChild(b); });
+    [...learned].forEach(k=>{ const b=document.createElement('div'); b.className='learned-kanji-badge'; b.textContent=k; wrap.appendChild(b); });
+    // 学年バッジ更新
+    const badge=document.getElementById('recordGradeBadge');
+    if(badge) badge.textContent=is2?'2年生':'1年生';
   },
   confirmReset(){
-    if(confirm('きろくをけしますか？')){ State.bestStreak=State.totalCorrect=State.totalGames=0; State.learnedKanji=new Set(); Store.save(); this.renderRecords(); Speech.say('きろくをけしました'); }
+    if(confirm('きろくをけしますか？')){
+      if(State.grade===2){ State.bestStreak2=State.totalCorrect2=State.totalGames2=0; State.learnedKanji2=new Set(); }
+      else { State.bestStreak=State.totalCorrect=State.totalGames=0; State.learnedKanji=new Set(); }
+      Store.save(); this.renderRecords(); Speech.say('きろくをけしました');
+    }
   },
 
   startGame(){
     const batch=DeckManager.nextBatch(State.questionCount);
-    State.currentKanjiSet=KANJI_DATA;
+    State.currentKanjiSet=State.grade===2?KANJI_DATA_2:KANJI_DATA;
     State.totalQuestions=batch.length;
     State.score=State.combo=State.maxCombo=State.answered=0; State.results=[];
     State.questionQueue=batch;
@@ -896,8 +969,8 @@ const App={
       btn.classList.add('correct');
       State.score++; State.combo++;
       if(State.combo>State.maxCombo) State.maxCombo=State.combo;
-      State.totalCorrect++;
-      State.learnedKanji.add(correct.kanji);
+      if(State.grade===2){ State.totalCorrect2++; State.learnedKanji2.add(correct.kanji); }
+      else { State.totalCorrect++; State.learnedKanji.add(correct.kanji); }
       starBurst(btn);
       document.getElementById('comboDisplay').textContent=State.combo>=3?`🔥 ${State.combo}れんぞく せいかい！`:'';
       document.getElementById('speechText').textContent=`せいかい！「${correct.kanji}（${correct.reading}）」だよ！`;
@@ -926,6 +999,26 @@ const App={
     this._nextQuestion();
   },
 
+  setGrade(g){
+    State.grade=g;
+    Store.save();
+    DeckManager.init();
+    // 学年ボタンのUI更新
+    [1,2].forEach(n=>{
+      const btn=document.getElementById(`grade-btn-${n}`);
+      if(btn) btn.classList.toggle('active',State.grade===n);
+    });
+    // メニューの学年表示を更新
+    this._updateGradeDisplay();
+  },
+
+  _updateGradeDisplay(){
+    const label=document.getElementById('gradeLabel');
+    if(label) label.textContent=State.grade===2?'2年生':'1年生';
+    const total=document.getElementById('gradeTotal');
+    if(total) total.textContent=State.grade===2?'160字':'80字';
+  },
+
   goSetup(){
     [5,7,10].forEach(n=>document.getElementById(`count-${n}`).classList.toggle('active',State.questionCount===n));
     this.showScreen('count');
@@ -937,8 +1030,13 @@ const App={
   _nekoSad(){   const el=document.getElementById('nekoGame'); el.style.transform='scale(0.9) rotate(-5deg)';  setTimeout(()=>el.style.transform='',400); },
 
   _endGame(){
-    State.totalGames++;
-    if(State.maxCombo>State.bestStreak) State.bestStreak=State.maxCombo;
+    if(State.grade===2){
+      State.totalGames2++;
+      if(State.maxCombo>State.bestStreak2) State.bestStreak2=State.maxCombo;
+    } else {
+      State.totalGames++;
+      if(State.maxCombo>State.bestStreak) State.bestStreak=State.maxCombo;
+    }
     Store.save();
     const pct=State.score/State.totalQuestions;
     const title=pct===1?'💯 かんぺき！！！':pct>=.8?'✨ すごい！':pct>=.5?'👍 よくできました！':'😊 れんしゅうしよう！';
@@ -964,6 +1062,12 @@ document.addEventListener('DOMContentLoaded',()=>{
   Store.load();
   DeckManager.init();
   App.showScreen('menu');
+  App._updateGradeDisplay();
+  // 学年ボタンの初期選択
+  [1,2].forEach(n=>{
+    const btn=document.getElementById(`grade-btn-${n}`);
+    if(btn) btn.classList.toggle('active',State.grade===n);
+  });
   if('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(()=>{});
   console.log(`漢字データ: ${KANJI_DATA.length}字 →`, KANJI_DATA.map(k=>k.kanji).join(''));
 });

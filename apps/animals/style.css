@@ -47,7 +47,7 @@ html, body {
   align-items: center;
   justify-content: center;
   gap: 24px;
-  padding: 70px 20px 40px;
+  padding: 90px 20px 40px;
   background: linear-gradient(160deg, #FFF0FA 0%, #EEF4FF 50%, #FFFFF0 100%);
   position: relative; /* 絶対配置の子を受け取る */
 }
@@ -55,16 +55,16 @@ html, body {
 /* メニュー内のハブ戻るボタン */
 .menu-hub-btn {
   position: absolute;
-  top: 54px; left: 16px;
+  top: 12px; left: 16px;
   display: flex; align-items: center; gap: 6px;
-  background: rgba(255,255,255,0.92);
+  background: rgba(255,255,255,0.97);
   border: 2.5px solid #FF6B9D; color: #FF6B9D;
   border-radius: 50px; padding: 8px 16px 8px 12px;
   font-family: 'Kosugi Maru', 'Noto Sans JP', sans-serif;
   font-size: 13px; font-weight: 900;
   text-decoration: none;
   box-shadow: 0 4px 14px rgba(255,107,157,0.28);
-  z-index: 20; transition: transform 0.1s;
+  z-index: 500; transition: transform 0.1s;
 }
 .menu-hub-btn:active { transform: scale(0.95); }
 

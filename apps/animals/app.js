@@ -131,6 +131,9 @@ function showScreen(name) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   const el = document.getElementById('screen-' + name);
   if (el) el.classList.add('active');
+  // メニュー以外でback-to-hubボタンを表示
+  const hub = document.getElementById('back-to-hub');
+  if (hub) hub.style.display = (name === 'menu') ? 'none' : 'flex';
 }
 
 // ===== セットアップ トグル =====
