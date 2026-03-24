@@ -165,6 +165,9 @@ html, body {
   background: linear-gradient(135deg, var(--yellow) 0%, #e65100 100%);
   color: #5a2800;
 }
+.app-card--zokusei {
+  background: linear-gradient(135deg, #4C2A85 0%, #1565C0 100%);
+}
 
 .card-icon {
   font-size: clamp(36px, 10vw, 48px);
