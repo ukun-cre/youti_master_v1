@@ -709,6 +709,61 @@ const SUPPLEMENT = [
   }
 })();
 
+/* =========================================
+   小学3年生 漢字 200字  全データ
+   ========================================= */
+const KANJI_DATA_3 = (function(){
+  const d = [
+    ['悪','わるい','😈'],  ['安','やすい','💰'],  ['暗','くらい','🌑'],  ['医','い','🏥'],    ['委','い','🙋'],
+    ['意','い','💭'],       ['育','そだてる','🌱'],['員','いん','👔'],    ['院','いん','🏡'],  ['飲','のむ','🥤'],
+    ['運','うん','🍀'],     ['泳','およぐ','🏊'],  ['駅','えき','🚉'],   ['央','おう','⭕'],   ['横','よこ','↔️'],
+    ['屋','や','🏠'],       ['温','あたたかい','🌡️'],['化','か','⚗️'], ['荷','に','📦'],    ['界','かい','🌏'],
+    ['開','あける','🚪'],   ['階','かい','🏢'],    ['寒','さむい','🥶'], ['感','かん','💓'],  ['漢','かん','📖'],
+    ['館','やかた','🏛️'],  ['岸','きし','🏖️'],   ['起','おきる','⏰'], ['期','き','📅'],    ['客','きゃく','👥'],
+    ['究','きわめる','🔍'], ['急','いそぐ','🚨'],  ['球','きゅう','⚽'], ['去','さる','👋'],  ['橋','はし','🌉'],
+    ['業','ぎょう','💼'],   ['曲','きょく','🎵'],  ['局','きょく','📮'], ['銀','ぎん','🥈'],  ['区','く','🗺️'],
+    ['苦','くるしい','😣'], ['具','ぐ','🔧'],      ['君','きみ','👦'],   ['係','かかり','🔗'],['軽','かるい','🪶'],
+    ['血','ち','🩸'],       ['決','きめる','✅'],   ['研','みがく','🔬'], ['県','けん','📍'],  ['庫','くら','🏭'],
+    ['湖','みずうみ','🏞️'],['向','むく','➡️'],    ['幸','しあわせ','😊'],['港','みなと','⚓'],['号','ごう','🔢'],
+    ['根','ね','🌳'],       ['祭','まつり','🎉'],  ['皿','さら','🍽️'],  ['仕','しごと','👔'],['死','しぬ','💀'],
+    ['使','つかう','🔧'],   ['始','はじまる','🚀'],['指','ゆび','👆'],   ['歯','は','🦷'],    ['詩','し','📝'],
+    ['次','つぎ','➡️'],     ['事','こと','📋'],    ['持','もつ','✋'],   ['式','しき','🎊'],  ['実','み','🍎'],
+    ['写','うつす','📸'],   ['者','もの','👤'],    ['主','ぬし','👑'],   ['守','まもる','🛡️'],['取','とる','✋'],
+    ['酒','さけ','🍶'],     ['受','うける','📥'],  ['州','しゅう','🗺️'],['拾','ひろう','♻️'],['終','おわる','🏁'],
+    ['習','ならう','📚'],   ['集','あつめる','🐦'],['住','すむ','🏠'],   ['重','おもい','⚖️'],['宿','しゅく','🏨'],
+    ['所','ところ','📍'],   ['暑','あつい','☀️'],  ['助','たすける','🆘'],['昭','しょう','📜'],['消','きえる','🧹'],
+    ['商','あきない','🛒'],  ['章','しょう','📖'],  ['勝','かつ','🏆'],  ['乗','のる','🚃'],  ['植','うえる','🌱'],
+    ['申','もうす','📢'],   ['身','み','👤'],       ['神','かみ','⛩️'],  ['真','ま','✨'],    ['深','ふかい','🌊'],
+    ['進','すすむ','➡️'],   ['世','よ','🌍'],      ['整','ととのえる','📐'],['昔','むかし','📜'],['全','すべて','💯'],
+    ['想','おもう','💭'],   ['相','あい','🤝'],    ['送','おくる','📤'],  ['息','いき','💨'],  ['族','ぞく','👨‍👩‍👦'],
+    ['他','ほか','➕'],     ['打','うつ','🥊'],    ['対','たい','⚔️'],   ['待','まつ','⏳'],  ['代','かわる','🔄'],
+    ['第','だい','🔢'],     ['題','だい','📝'],    ['炭','すみ','🪨'],   ['短','みじかい','📏'],['談','はなし','💬'],
+    ['着','きる','👕'],     ['注','そそぐ','💧'],  ['柱','はしら','🏛️'],['丁','てい','🔧'],   ['帳','ちょう','📓'],
+    ['調','しらべる','🔍'],  ['追','おう','🏃'],   ['定','さだめる','📋'],['庭','にわ','🌳'],  ['笛','ふえ','🎶'],
+    ['鉄','てつ','⚙️'],    ['転','ころぶ','🔄'],   ['都','みやこ','🏙️'],['度','たび','📐'],  ['投','なげる','🏹'],
+    ['豆','まめ','🫘'],     ['島','しま','🏝️'],   ['湯','ゆ','♨️'],    ['登','のぼる','⛰️'],['等','ひとしい','🟰'],
+    ['動','うごく','🏃'],   ['童','わらべ','👧'],  ['農','のう','🌾'],   ['波','なみ','🌊'],  ['配','くばる','📦'],
+    ['倍','ばい','✌️'],     ['箱','はこ','📦'],    ['畑','はたけ','🌾'], ['発','でる','💥'],  ['反','そる','🔄'],
+    ['坂','さか','⛰️'],    ['板','いた','🪵'],     ['皮','かわ','🫁'],   ['悲','かなしい','😢'],['美','うつくしい','🌸'],
+    ['鼻','はな','👃'],     ['筆','ふで','✒️'],    ['氷','こおり','🧊'],  ['表','おもて','📊'], ['秒','びょう','⏱️'],
+    ['病','やまい','🤒'],   ['品','しな','🏷️'],   ['負','まける','😔'],  ['部','ぶ','📁'],    ['服','ふく','👕'],
+    ['福','ふく','🍀'],     ['物','もの','🎁'],    ['平','たいら','🟰'],  ['返','かえす','↩️'],['勉','つとめる','📖'],
+    ['放','はなつ','🎈'],   ['味','あじ','😋'],    ['命','いのち','❤️'],  ['面','おもて','🎭'], ['問','とう','❓'],
+    ['役','やく','🎭'],     ['薬','くすり','💊'],  ['由','よし','🌿'],    ['油','あぶら','🛢️'],['有','ある','✅'],
+    ['遊','あそぶ','🎠'],   ['予','かねて','📅'],  ['羊','ひつじ','🐑'],  ['洋','うみ','🌊'],  ['葉','は','🍁'],
+    ['陽','ひ','☀️'],      ['様','さま','👑'],     ['落','おちる','🍂'],  ['流','ながれる','🌊'],['旅','たび','🧳'],
+    ['両','りょう','↔️'],  ['緑','みどり','🌿'],  ['礼','れい','🙏'],    ['列','れつ','📏'],  ['練','ねる','💪'],
+    ['路','みち','🛣️'],    ['和','やわらぐ','☮️'],['速','はやい','⚡'],  ['泉','いずみ','💧'],['宮','みや','⛩️'],
+  ];
+  const bgs=['#FFF0E0','#E8F8E8','#E0ECFF','#FFE8F0','#F0E8FF','#FFFCE0','#E0FCFC','#FFF8E0'];
+  return d.map(([k,r,e],i)=>({
+    kanji:k, reading:r,
+    illust:svgWrap(bgs[i%bgs.length],`${em(e,'50','46','52')}${lbl(r,'#555')}`),
+    speech:`${r}。${k}という漢字を覚えましょう！`,
+    questionSpeech:`${r}という漢字はどれかな？`
+  }));
+})();
+
 /* ===========================
    APP STATE
    =========================== */
@@ -719,14 +774,15 @@ const State={
   score:0, combo:0, maxCombo:0, totalQuestions:5, answered:0, results:[],
   learnedKanji:new Set(), bestStreak:0, totalCorrect:0, totalGames:0,
   learnedKanji2:new Set(), bestStreak2:0, totalCorrect2:0, totalGames2:0,
+  learnedKanji3:new Set(), bestStreak3:0, totalCorrect3:0, totalGames3:0,
 };
 
 /* ===========================
    DECK MANAGER
    =========================== */
 const DeckManager={
-  _key(){ return State.grade===2?'kanjiDeck2':'kanjiDeck'; },
-  _data(){ return State.grade===2?KANJI_DATA_2:KANJI_DATA; },
+  _key(){ return State.grade===3?'kanjiDeck3':State.grade===2?'kanjiDeck2':'kanjiDeck'; },
+  _data(){ return State.grade===3?KANJI_DATA_3:State.grade===2?KANJI_DATA_2:KANJI_DATA; },
   init(){
     try{
       const d=JSON.parse(localStorage.getItem(this._key())||'null');
@@ -776,6 +832,8 @@ const Store={
       learnedKanji:[...State.learnedKanji],
       bestStreak2:State.bestStreak2, totalCorrect2:State.totalCorrect2, totalGames2:State.totalGames2,
       learnedKanji2:[...State.learnedKanji2],
+      bestStreak3:State.bestStreak3, totalCorrect3:State.totalCorrect3, totalGames3:State.totalGames3,
+      learnedKanji3:[...State.learnedKanji3],
     }));}catch(e){}
   },
   load(){
@@ -792,6 +850,10 @@ const Store={
       if(d.totalCorrect2)       State.totalCorrect2=d.totalCorrect2;
       if(d.totalGames2)         State.totalGames2=d.totalGames2;
       if(d.learnedKanji2)       State.learnedKanji2=new Set(d.learnedKanji2);
+      if(d.bestStreak3)         State.bestStreak3=d.bestStreak3;
+      if(d.totalCorrect3)       State.totalCorrect3=d.totalCorrect3;
+      if(d.totalGames3)         State.totalGames3=d.totalGames3;
+      if(d.learnedKanji3)       State.learnedKanji3=new Set(d.learnedKanji3);
     }catch(e){}
   },
 };
@@ -894,12 +956,12 @@ const App={
   saveSettings(){ Store.save(); Speech.say('ほぞんしました！'); setTimeout(()=>this.showScreen('menu'),800); },
 
   renderRecords(){
-    const is2=State.grade===2;
-    const streak=is2?State.bestStreak2:State.bestStreak;
-    const correct=is2?State.totalCorrect2:State.totalCorrect;
-    const games=is2?State.totalGames2:State.totalGames;
-    const learned=is2?State.learnedKanji2:State.learnedKanji;
-    const total=is2?160:80;
+    const g=State.grade;
+    const streak=g===3?State.bestStreak3:g===2?State.bestStreak2:State.bestStreak;
+    const correct=g===3?State.totalCorrect3:g===2?State.totalCorrect2:State.totalCorrect;
+    const games=g===3?State.totalGames3:g===2?State.totalGames2:State.totalGames;
+    const learned=g===3?State.learnedKanji3:g===2?State.learnedKanji2:State.learnedKanji;
+    const total=g===3?200:g===2?160:80;
     document.getElementById('recordNumber').textContent=streak;
     document.getElementById('totalCorrect').textContent=correct;
     document.getElementById('totalGames').textContent=games;
@@ -910,11 +972,12 @@ const App={
     [...learned].forEach(k=>{ const b=document.createElement('div'); b.className='learned-kanji-badge'; b.textContent=k; wrap.appendChild(b); });
     // 学年バッジ更新
     const badge=document.getElementById('recordGradeBadge');
-    if(badge) badge.textContent=is2?'2年生':'1年生';
+    if(badge) badge.textContent=g===3?'3年生':g===2?'2年生':'1年生';
   },
   confirmReset(){
     if(confirm('きろくをけしますか？')){
-      if(State.grade===2){ State.bestStreak2=State.totalCorrect2=State.totalGames2=0; State.learnedKanji2=new Set(); }
+      if(State.grade===3){ State.bestStreak3=State.totalCorrect3=State.totalGames3=0; State.learnedKanji3=new Set(); }
+      else if(State.grade===2){ State.bestStreak2=State.totalCorrect2=State.totalGames2=0; State.learnedKanji2=new Set(); }
       else { State.bestStreak=State.totalCorrect=State.totalGames=0; State.learnedKanji=new Set(); }
       Store.save(); this.renderRecords(); Speech.say('きろくをけしました');
     }
@@ -969,7 +1032,8 @@ const App={
       btn.classList.add('correct');
       State.score++; State.combo++;
       if(State.combo>State.maxCombo) State.maxCombo=State.combo;
-      if(State.grade===2){ State.totalCorrect2++; State.learnedKanji2.add(correct.kanji); }
+      if(State.grade===3){ State.totalCorrect3++; State.learnedKanji3.add(correct.kanji); }
+      else if(State.grade===2){ State.totalCorrect2++; State.learnedKanji2.add(correct.kanji); }
       else { State.totalCorrect++; State.learnedKanji.add(correct.kanji); }
       starBurst(btn);
       document.getElementById('comboDisplay').textContent=State.combo>=3?`🔥 ${State.combo}れんぞく せいかい！`:'';
@@ -1004,7 +1068,7 @@ const App={
     Store.save();
     DeckManager.init();
     // 学年ボタンのUI更新
-    [1,2].forEach(n=>{
+    [1,2,3].forEach(n=>{
       const btn=document.getElementById(`grade-btn-${n}`);
       if(btn) btn.classList.toggle('active',State.grade===n);
     });
@@ -1013,10 +1077,11 @@ const App={
   },
 
   _updateGradeDisplay(){
+    const g=State.grade;
     const label=document.getElementById('gradeLabel');
-    if(label) label.textContent=State.grade===2?'2年生':'1年生';
+    if(label) label.textContent=g===3?'3年生':g===2?'2年生':'1年生';
     const total=document.getElementById('gradeTotal');
-    if(total) total.textContent=State.grade===2?'160字':'80字';
+    if(total) total.textContent=g===3?'200字':g===2?'160字':'80字';
   },
 
   goSetup(){
@@ -1030,7 +1095,10 @@ const App={
   _nekoSad(){   const el=document.getElementById('nekoGame'); el.style.transform='scale(0.9) rotate(-5deg)';  setTimeout(()=>el.style.transform='',400); },
 
   _endGame(){
-    if(State.grade===2){
+    if(State.grade===3){
+      State.totalGames3++;
+      if(State.maxCombo>State.bestStreak3) State.bestStreak3=State.maxCombo;
+    } else if(State.grade===2){
       State.totalGames2++;
       if(State.maxCombo>State.bestStreak2) State.bestStreak2=State.maxCombo;
     } else {
@@ -1064,7 +1132,7 @@ document.addEventListener('DOMContentLoaded',()=>{
   App.showScreen('menu');
   App._updateGradeDisplay();
   // 学年ボタンの初期選択
-  [1,2].forEach(n=>{
+  [1,2,3].forEach(n=>{
     const btn=document.getElementById(`grade-btn-${n}`);
     if(btn) btn.classList.toggle('active',State.grade===n);
   });
